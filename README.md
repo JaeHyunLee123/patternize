@@ -26,6 +26,7 @@ This works on PC. Mobile version will be add after finishing pc version.
 ## .env variables
 
 DATABASE_URL -> database link
+NEXTAUTH_URL -> only on production
 
 ## deployment
 
