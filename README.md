@@ -28,3 +28,6 @@ This works on PC. Mobile version will be add after finishing pc version.
 DATABASE_URL -> database link
 
 ## deployment
+
+- planetscale
+- vercel
