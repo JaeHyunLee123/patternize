@@ -11,7 +11,7 @@ const Header = async () => {
         <h1 className="font-bold text-xl">Patternize</h1>
       </Link>
 
-      {session?.user ? (
+      {session ? (
         <Button variant={"destructive"}>
           <Link href="/sign-out">Sign Out</Link>
         </Button>
