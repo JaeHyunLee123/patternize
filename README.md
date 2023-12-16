@@ -26,11 +26,11 @@ This works on PC. Mobile version will be add after finishing pc version.
 
 ## .env variables
 
-DATABASE_URL -> database link
-NEXTAUTH_URL -> only on production
+- DATABASE_URL -> database link
+- NEXTAUTH_URL -> only on production
 
-GITHUB_CLIENT_ID
-GITHUB_CLIENT_SECRET
+- GITHUB_CLIENT_ID
+- GITHUB_CLIENT_SECRET
 
 ## deployment
 
