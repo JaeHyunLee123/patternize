@@ -32,6 +32,10 @@ This works on PC. Mobile version will be add after finishing pc version.
 - GITHUB_CLIENT_ID
 - GITHUB_CLIENT_SECRET
 
+## auth
+
+- github
+
 ## deployment
 
 - planetscale
