@@ -2,7 +2,7 @@
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 
-const SignIn = () => {
+const Page = () => {
   return (
     <div className="flex flex-col w-full p-24 justify-center items-center gap-4">
       <span className="text-foreground text-lg">
@@ -19,4 +19,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Page;

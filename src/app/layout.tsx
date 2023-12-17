@@ -12,14 +12,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  authModal,
 }: {
   children: React.ReactNode;
+  authModal: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <Header />
         {children}
+        {authModal}
       </body>
     </html>
   );
