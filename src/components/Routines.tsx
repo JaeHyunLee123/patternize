@@ -28,7 +28,9 @@ const Routines = () => {
         ) : data?.dailyRoutines?.length === 0 ? (
           <p>No daily routine</p>
         ) : (
-          <p>show routine here</p>
+          data?.dailyRoutines?.map((routine) => (
+            <p key={routine.id}>{routine.content}</p>
+          ))
         )}
       </CardContent>
     </Card>
