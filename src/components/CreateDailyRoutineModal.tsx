@@ -8,9 +8,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/Dialog";
 import { Button } from "./ui/Button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
-import { Label } from "./ui/label";
+import { Label } from "./ui/Label";
 
 interface CreateDailyRoutineForm {
   content: string;
@@ -19,6 +19,7 @@ interface CreateDailyRoutineForm {
 const CreateDailyRoutineModal = () => {
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<CreateDailyRoutineForm>({ mode: "onChange" });
 
@@ -37,7 +38,7 @@ const CreateDailyRoutineModal = () => {
         </DialogHeader>
         <form
           className="flex flex-col space-y-2 items-center"
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="w-full">
             <Label htmlFor="routine">Routine</Label>
