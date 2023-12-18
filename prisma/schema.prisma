@@ -106,7 +106,7 @@ model Routine {
   date        DateTime
   routineType RoutineType //ONE_DAY, DAILY, WEEKLY, MONTHLY
 
-  //routineControl field has value only when routineType is ONE_DAY 
+  //routineControl field has value only when routineType is ONE_DAY or delayed weekly/monthly routine
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
   //dailyRoutine field has value only when routineType is DAILY
