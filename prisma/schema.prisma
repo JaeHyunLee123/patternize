@@ -130,6 +130,8 @@ model DailyRoutine {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  content String @db.VarChar(200)
+
   routines Routine[]
 
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
@@ -143,7 +145,8 @@ model WeeklyRoutine {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  day Day
+  content String @db.VarChar(200)
+  day     Day
 
   routines Routine[]
 
@@ -160,9 +163,10 @@ model MonthlyRoutine {
 
   //User will choose one way to manage monthly routine.
   //One option is manage by nthWeek and day another is by date.
-  nthWeek Int? @db.SmallInt
+  nthWeek Int?   @db.SmallInt
   day     Day?
-  date    Int? @db.SmallInt
+  date    Int?   @db.SmallInt
+  content String @db.VarChar(200)
 
   routines Routine[]
 
