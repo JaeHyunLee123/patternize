@@ -17,7 +17,14 @@ interface CreateDailyRoutineForm {
 }
 
 const CreateDailyRoutineModal = () => {
-  const { register } = useForm<CreateDailyRoutineForm>();
+  const {
+    register,
+    formState: { errors },
+  } = useForm<CreateDailyRoutineForm>({ mode: "onChange" });
+
+  const onSubmit = () => {
+    console.log("Do nothing yet");
+  };
 
   return (
     <Dialog>
@@ -28,7 +35,10 @@ const CreateDailyRoutineModal = () => {
         <DialogHeader>
           <DialogTitle>Create Daily Routine</DialogTitle>
         </DialogHeader>
-        <form className="flex flex-col space-y-2 items-center">
+        <form
+          className="flex flex-col space-y-2 items-center"
+          onSubmit={onSubmit}
+        >
           <div className="w-full">
             <Label htmlFor="routine">Routine</Label>
             <Input
@@ -45,6 +55,9 @@ const CreateDailyRoutineModal = () => {
                 },
               })}
             />
+            <span className="text-red-500">
+              {errors.content ? errors.content.message : ""}
+            </span>
           </div>
           <Button type="submit" className="w-[50%]">
             Create
