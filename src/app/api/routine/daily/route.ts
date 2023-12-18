@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { createRoutineControl } from "@/lib/utils";
+import { createRoutineControl } from "@/lib/server-utils";
 
 export const GET = async (req: Request) => {
   try {
@@ -10,6 +10,8 @@ export const GET = async (req: Request) => {
 
     const body = await req.json();
     const { userId } = body;
+
+    console.log(userId);
 
     if (!userId || typeof userId !== "string")
       return new Response("Need userid", { status: 400 });
