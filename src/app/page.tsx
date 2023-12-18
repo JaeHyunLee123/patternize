@@ -1,7 +1,12 @@
+import { getAuthSession } from "@/lib/auth";
+import Routines from "@/components/Routines";
+
 export default async function Home() {
+  const session = await getAuthSession();
+
   return (
     <main className="p-24">
-      <h1>Home</h1>
+      {session ? <Routines userId={session.user.id} /> : <h1>Login first!</h1>}
     </main>
   );
 }

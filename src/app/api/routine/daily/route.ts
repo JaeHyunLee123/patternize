@@ -8,10 +8,7 @@ export const GET = async (req: Request) => {
 
     if (!session?.user) return new Response("Unauthorized", { status: 401 });
 
-    const body = await req.json();
-    const { userId } = body;
-
-    console.log(userId);
+    const userId = session.user.id;
 
     if (!userId || typeof userId !== "string")
       return new Response("Need userid", { status: 400 });
