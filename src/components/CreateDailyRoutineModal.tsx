@@ -2,6 +2,7 @@
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -14,12 +15,14 @@ import { Label } from "./ui/Label";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { StandardAPI } from "@/types/API";
+import { useToast } from "@/hook/use-toast";
 
 interface CreateDailyRoutineForm {
   content: string;
 }
 
 const CreateDailyRoutineModal = () => {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -30,9 +33,19 @@ const CreateDailyRoutineModal = () => {
     mutationFn: (form: CreateDailyRoutineForm) => {
       return axios.post("/api/routine/daily", form);
     },
+    onSuccess: () => {
+      toast({
+        title: "Create Daily Routine Success!",
+        className: "bg-green-300",
+      });
+    },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
+        toast({
+          title: "Create Daily Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
       }
     },
   });
