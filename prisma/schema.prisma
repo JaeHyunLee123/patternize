@@ -158,9 +158,11 @@ model MonthlyRoutine {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  nthWeek Int?      @db.SmallInt
+  //User will choose one way to manage monthly routine.
+  //One option is manage by nthWeek and day another is by date.
+  nthWeek Int? @db.SmallInt
   day     Day?
-  date    DateTime?
+  date    Int? @db.SmallInt
 
   routines Routine[]
 
