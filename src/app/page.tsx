@@ -6,7 +6,7 @@ export default async function Home() {
 
   return (
     <main className="p-24">
-      {session ? <Routines userId={session.user.id} /> : <h1>Login first!</h1>}
+      {session ? <Routines /> : <h1>Login first!</h1>}
     </main>
   );
 }

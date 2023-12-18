@@ -2,19 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { DailyRoutine } from "@prisma/client";
+import type { GetDailyRoutinesAPI } from "@/types/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/Card";
-
-const Routines = ({ userId }: { userId: string }) => {
-  const { data, isPending } = useQuery<DailyRoutine[]>({
+const Routines = () => {
+  const { data, isPending } = useQuery<GetDailyRoutinesAPI>({
     queryKey: ["daily routines"],
     queryFn: async () => {
       const response = await axios.get("/api/routine/daily");
@@ -31,7 +23,7 @@ const Routines = ({ userId }: { userId: string }) => {
       <CardContent>
         {isPending ? (
           <p>Loading data...</p>
-        ) : data?.length === 0 ? (
+        ) : data?.dailyRoutines?.length === 0 ? (
           <p>No daily routine</p>
         ) : (
           <p>show routine here</p>

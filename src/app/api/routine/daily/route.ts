@@ -6,12 +6,19 @@ export const GET = async (req: Request) => {
   try {
     const session = await getAuthSession();
 
-    if (!session?.user) return new Response("Unauthorized", { status: 401 });
+    if (!session?.user)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
 
     const userId = session.user.id;
 
     if (!userId || typeof userId !== "string")
-      return new Response("Need userid", { status: 400 });
+      return Response.json(
+        { errorMessage: "Need userid", ok: false },
+        { status: 400 }
+      );
 
     let routineControl = await db.routineControl.findUnique({
       where: {
@@ -35,12 +42,18 @@ export const GET = async (req: Request) => {
     }
 
     if (!routineControl)
-      return new Response("Cannot find routine", { status: 500 });
+      return Response.json(
+        { errorMessage: "Cannot find routine", ok: false },
+        { status: 500 }
+      );
 
     const dailyRoutines = routineControl.dailyRoutines;
 
-    return Response.json(dailyRoutines, { status: 201 });
+    return Response.json({ dailyRoutines, ok: true }, { status: 201 });
   } catch (error) {
-    return new Response("Unknown Error", { status: 500 });
+    return Response.json(
+      { errorMessage: "Unknown Error", ok: false },
+      { status: 500 }
+    );
   }
 };
