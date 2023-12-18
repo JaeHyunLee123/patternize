@@ -2,8 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { GetDailyRoutinesAPI } from "@/types/api";
+import type { GetDailyRoutinesAPI } from "@/types/API";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import CreateDailyRoutineModal from "./CreateDailyRoutineModal";
 
 const Routines = () => {
   const { data, isPending } = useQuery<GetDailyRoutinesAPI>({
@@ -17,8 +18,9 @@ const Routines = () => {
 
   return (
     <Card className="w-[50%]">
-      <CardHeader>
+      <CardHeader className="flex flex-row space-x-6 items-center">
         <CardTitle>Daily Routines</CardTitle>
+        <CreateDailyRoutineModal />
       </CardHeader>
       <CardContent>
         {isPending ? (
