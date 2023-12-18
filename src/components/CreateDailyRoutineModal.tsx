@@ -11,6 +11,9 @@ import { Button } from "./ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { Label } from "./ui/Label";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { StandardAPI } from "@/types/API";
 
 interface CreateDailyRoutineForm {
   content: string;
@@ -23,13 +26,24 @@ const CreateDailyRoutineModal = () => {
     formState: { errors },
   } = useForm<CreateDailyRoutineForm>({ mode: "onChange" });
 
-  const onSubmit = () => {
-    console.log("Do nothing yet");
+  const { mutate, isPending } = useMutation({
+    mutationFn: (form: CreateDailyRoutineForm) => {
+      return axios.post("/api/routine/daily", form);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+      }
+    },
+  });
+
+  const onSubmit = (form: CreateDailyRoutineForm) => {
+    mutate(form);
   };
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant={"outline"}>Add New</Button>
       </DialogTrigger>
       <DialogContent>
@@ -60,8 +74,8 @@ const CreateDailyRoutineModal = () => {
               {errors.content ? errors.content.message : ""}
             </span>
           </div>
-          <Button type="submit" className="w-[50%]">
-            Create
+          <Button type="submit" className="w-[50%]" disabled={isPending}>
+            {isPending ? "Creating..." : "Create"}
           </Button>
         </form>
       </DialogContent>

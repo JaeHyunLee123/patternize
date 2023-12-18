@@ -1,7 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createRoutineControl } from "@/lib/server-utils";
-import { type } from "os";
 
 export const GET = async (req: Request) => {
   try {
@@ -69,9 +68,9 @@ export const POST = async (req: Request) => {
         { status: 401 }
       );
 
-    const {
-      body: { content },
-    } = await req.json();
+    const body = await req.json();
+
+    const { content } = body;
 
     if (!content || typeof content !== "string")
       return Response.json(
