@@ -21,7 +21,7 @@ interface CreateDailyRoutineForm {
   content: string;
 }
 
-const CreateDailyRoutineModal = () => {
+const CreateDailyRoutineModal = ({ refetch }: { refetch: Function }) => {
   const { toast } = useToast();
   const {
     register,
@@ -34,6 +34,7 @@ const CreateDailyRoutineModal = () => {
       return axios.post("/api/routine/daily", form);
     },
     onSuccess: () => {
+      refetch();
       toast({
         title: "Create Daily Routine Success!",
         className: "bg-green-300",
@@ -87,9 +88,11 @@ const CreateDailyRoutineModal = () => {
               {errors.content ? errors.content.message : ""}
             </span>
           </div>
-          <Button type="submit" className="w-[50%]" disabled={isPending}>
-            {isPending ? "Creating..." : "Create"}
-          </Button>
+          <DialogClose asChild>
+            <Button type="submit" className="w-[50%]" disabled={isPending}>
+              {isPending ? "Creating..." : "Create"}
+            </Button>
+          </DialogClose>
         </form>
       </DialogContent>
     </Dialog>

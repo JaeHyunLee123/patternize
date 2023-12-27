@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { X } from "lucide-react";
 
+//Modal for parrellel routing
 const Modal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 

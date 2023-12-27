@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import CreateDailyRoutineModal from "./CreateDailyRoutineModal";
 
 const Routines = () => {
-  const { data, isPending } = useQuery<GetDailyRoutinesAPI>({
+  const { data, isPending, refetch } = useQuery<GetDailyRoutinesAPI>({
     queryKey: ["daily routines"],
     queryFn: async () => {
       const response = await axios.get("/api/routine/daily");
@@ -20,7 +20,7 @@ const Routines = () => {
     <Card className="w-[50%]">
       <CardHeader className="flex flex-row space-x-6 items-center">
         <CardTitle>Daily Routines</CardTitle>
-        <CreateDailyRoutineModal />
+        <CreateDailyRoutineModal refetch={refetch} />
       </CardHeader>
       <CardContent>
         {isPending ? (
