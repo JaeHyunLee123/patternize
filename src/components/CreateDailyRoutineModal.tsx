@@ -12,16 +12,25 @@ import { Button } from "./ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { Label } from "./ui/Label";
-import { useMutation } from "@tanstack/react-query";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  useMutation,
+} from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { StandardAPI } from "@/types/API";
 import { useToast } from "@/hook/use-toast";
+
+interface CreateDailyRoutineModalProps {
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
+}
 
 interface CreateDailyRoutineForm {
   content: string;
 }
 
-const CreateDailyRoutineModal = ({ refetch }: { refetch: Function }) => {
+const CreateDailyRoutineModal = ({ refetch }: CreateDailyRoutineModalProps) => {
   const { toast } = useToast();
   const {
     register,
