@@ -8,10 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Button } from "./ui/Button";
+import { Button } from "../ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
-import { Label } from "./ui/Label";
+import { Label } from "../ui/Label";
 import {
   QueryObserverResult,
   RefetchOptions,
