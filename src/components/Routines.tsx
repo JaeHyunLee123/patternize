@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { GetDailyRoutinesAPI } from "@/types/API";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import CreateDailyRoutineModal from "./RoutineManagement/CreateDailyRoutineModal";
-import { Button } from "./ui/Button";
+import CreateDailyRoutineModal from "./routineManagement/daily/CreateDailyRoutineModal";
+import UpdateDailyRoutineSheet from "./routineManagement/daily/UpdateDailyRoutineSheet";
 
 const Routines = () => {
   const { data, isPending, refetch } = useQuery<GetDailyRoutinesAPI>({
@@ -30,9 +30,11 @@ const Routines = () => {
           <p>No daily routine</p>
         ) : (
           data?.dailyRoutines?.map((routine) => (
-            <div key={routine.id} className="flex items-center space-x-1">
-              <p>{routine.content}</p>
-            </div>
+            <UpdateDailyRoutineSheet
+              key={routine.id}
+              routineId={routine.id}
+              routineContent={routine.content}
+            />
           ))
         )}
       </CardContent>
