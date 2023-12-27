@@ -13,14 +13,50 @@ import {
 } from "@/components/ui/AlertDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { SheetClose } from "@/components/ui/Sheet";
+import { useToast } from "@/hook/use-toast";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  useMutation,
+} from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 
 interface DeleteDailyRoutineModalProps {
   routineId: string;
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
 const DeleteDailyRoutineModal = ({
   routineId,
+  refetch,
 }: DeleteDailyRoutineModalProps) => {
+  const { toast } = useToast();
+
+  const { mutate } = useMutation({
+    mutationFn: () => {
+      const payload = { routineId };
+      return axios.delete("/api/routine/daily", { data: payload });
+    },
+    onSuccess: () => {
+      refetch();
+      toast({
+        title: "Delete Daily Routine!",
+        className: "bg-red-300",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Delete Daily Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -39,7 +75,9 @@ const DeleteDailyRoutineModal = ({
           <SheetClose asChild>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
-              onClick={() => {}}
+              onClick={() => {
+                mutate();
+              }}
             >
               Delete
             </AlertDialogAction>

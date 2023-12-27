@@ -11,10 +11,14 @@ import {
 } from "@/components/ui/Sheet";
 import { Button } from "../../ui/Button";
 import DeleteDailyRoutineModal from "./DeleteDailyRoutineModal";
+import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
 
 interface UpdateDailyRoutineSheetProps {
   routineId: string;
   routineContent: string;
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
 //1. delete routine
@@ -24,6 +28,7 @@ interface UpdateDailyRoutineSheetProps {
 const UpdateDailyRoutineSheet = ({
   routineId,
   routineContent,
+  refetch,
 }: UpdateDailyRoutineSheetProps) => {
   return (
     <Sheet>
@@ -34,7 +39,7 @@ const UpdateDailyRoutineSheet = ({
         <SheetHeader>
           <SheetTitle>Update</SheetTitle>
         </SheetHeader>
-        <DeleteDailyRoutineModal routineId={routineId} />
+        <DeleteDailyRoutineModal routineId={routineId} refetch={refetch} />
       </SheetContent>
     </Sheet>
   );

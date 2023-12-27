@@ -34,6 +34,7 @@ const Routines = () => {
               key={routine.id}
               routineId={routine.id}
               routineContent={routine.content}
+              refetch={refetch}
             />
           ))
         )}
