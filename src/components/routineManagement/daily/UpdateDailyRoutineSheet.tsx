@@ -11,10 +11,18 @@ import {
 } from "@/components/ui/Sheet";
 import { Button } from "../../ui/Button";
 import DeleteDailyRoutineModal from "./DeleteDailyRoutineModal";
-import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
+import {
+  RefetchOptions,
+  QueryObserverResult,
+  useMutation,
+} from "@tanstack/react-query";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@radix-ui/react-label";
+import { useForm } from "react-hook-form";
+import { on } from "process";
+import axios, { AxiosError } from "axios";
+import { useToast } from "@/hook/use-toast";
 
 interface UpdateDailyRoutineSheetProps {
   routineId: string;
@@ -24,11 +32,59 @@ interface UpdateDailyRoutineSheetProps {
   ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
+interface UpdateDailyRoutineForm {
+  newContent: string;
+}
+
 const UpdateDailyRoutineSheet = ({
   routineId,
   routineContent,
   refetch,
 }: UpdateDailyRoutineSheetProps) => {
+  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UpdateDailyRoutineForm>({
+    mode: "onChange",
+  });
+  const { mutate } = useMutation({
+    mutationFn: ({
+      routineId,
+      newContent,
+    }: {
+      routineId: string;
+      newContent: string;
+    }) => {
+      const payload = { routineId, newContent };
+      return axios.put("/api/routine/daily", payload);
+    },
+    onSuccess: () => {
+      reset();
+      refetch();
+      toast({
+        title: "Create Daily Routine Success!",
+        className: "bg-green-300",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Create Daily Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const onSubmit = (form: UpdateDailyRoutineForm) => {
+    const newContent = form.newContent;
+    mutate({ routineId, newContent });
+  };
+
   return (
     <Sheet>
       <SheetTrigger className="block text-lg hover:font-semibold">
@@ -42,13 +98,38 @@ const UpdateDailyRoutineSheet = ({
           </SheetDescription>
         </SheetHeader>
         <div className="felx flex-col space-y-4 mt-4">
-          <div className="flex flex-col">
+          <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
             <Label htmlFor="newContent">New Routine Content</Label>
             <div className="flex items-center justify-between space-x-2 mt-1">
-              <Input placeholder="New Content" id="newContent" />
-              <Button variant={"outline"}>Update</Button>
+              <div className="flex flex-col space-y-1 w-full">
+                <Input
+                  placeholder="New Content"
+                  id="newContent"
+                  {...register("newContent", {
+                    required: "Please write new routine.",
+                    minLength: {
+                      value: 2,
+                      message: "Please write more than 2 letters",
+                    },
+                    maxLength: {
+                      value: 200,
+                      message: "Please write less than 200 letters",
+                    },
+                  })}
+                  className="w-full"
+                />
+                <span className="text-red-500">
+                  {errors.newContent ? errors.newContent.message : ""}
+                </span>
+              </div>
+
+              <SheetClose asChild>
+                <Button type="submit" variant={"outline"}>
+                  Update
+                </Button>
+              </SheetClose>
             </div>
-          </div>
+          </form>
           <Separator />
           <div className="flex items-center space-x-2 justify-between">
             <span className="text-foreground text-lg">Delete Routine</span>
