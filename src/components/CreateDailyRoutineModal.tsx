@@ -35,6 +35,7 @@ const CreateDailyRoutineModal = ({ refetch }: CreateDailyRoutineModalProps) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateDailyRoutineForm>({ mode: "onChange" });
 
@@ -43,6 +44,7 @@ const CreateDailyRoutineModal = ({ refetch }: CreateDailyRoutineModalProps) => {
       return axios.post("/api/routine/daily", form);
     },
     onSuccess: () => {
+      reset();
       refetch();
       toast({
         title: "Create Daily Routine Success!",
