@@ -16,7 +16,7 @@ import {
   SelectContent,
   SelectTrigger,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/components/ui/Select";
 import { Day } from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
