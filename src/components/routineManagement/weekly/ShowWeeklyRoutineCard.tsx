@@ -8,6 +8,7 @@ import type { GetWeeklyRoutinesAPI } from "@/types/API";
 import { Separator } from "@/components/ui/Separator";
 import DayRoutine from "./DayRoutine";
 import { Day } from "@prisma/client";
+import CreateWeeklyRoutineModal from "./CreateWeeklyRoutineModal";
 
 const ShowWeeklyRoutineCard: FC = () => {
   const { data, isPending, refetch } = useQuery<GetWeeklyRoutinesAPI>({
@@ -23,8 +24,9 @@ const ShowWeeklyRoutineCard: FC = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex items-center flex-row space-x-6">
         <CardTitle>Weekly Routines</CardTitle>
+        <CreateWeeklyRoutineModal refetch={refetch} />
       </CardHeader>
       <CardContent>
         {isPending ? (

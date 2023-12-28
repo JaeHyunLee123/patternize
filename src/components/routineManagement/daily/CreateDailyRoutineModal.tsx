@@ -100,8 +100,8 @@ const CreateDailyRoutineModal = ({ refetch }: CreateDailyRoutineModalProps) => {
             </span>
           </div>
           <DialogClose asChild>
-            <Button type="submit" className="w-[50%]" disabled={isPending}>
-              {isPending ? "Creating..." : "Create"}
+            <Button type="submit" className="w-[50%]">
+              Create
             </Button>
           </DialogClose>
         </form>
