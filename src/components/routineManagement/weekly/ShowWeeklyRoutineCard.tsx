@@ -7,6 +7,7 @@ import axios from "axios";
 import type { GetWeeklyRoutinesAPI } from "@/types/API";
 import { Separator } from "@/components/ui/Separator";
 import DayRoutine from "./DayRoutine";
+import { Day } from "@prisma/client";
 
 const ShowWeeklyRoutineCard: FC = () => {
   const { data, isPending, refetch } = useQuery<GetWeeklyRoutinesAPI>({
@@ -18,6 +19,8 @@ const ShowWeeklyRoutineCard: FC = () => {
     },
   });
 
+  const days = [Day.SUN, Day.MON, Day.TUE, Day.WED, Day.THU, Day.FRI, Day.SAT];
+
   return (
     <Card>
       <CardHeader>
@@ -28,20 +31,14 @@ const ShowWeeklyRoutineCard: FC = () => {
           <p>Loading data...</p>
         ) : (
           <div className="flex flex-col">
-            <DayRoutine routines={data?.weeklyRoutines} day="SUN" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="MON" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="TUE" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="WED" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="THU" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="FRI" />
-            <Separator />
-            <DayRoutine routines={data?.weeklyRoutines} day="SAT" />
-            <Separator />
+            {days.map((day) => {
+              return (
+                <>
+                  <DayRoutine routines={data?.weeklyRoutines} day={day} />
+                  <Separator />
+                </>
+              );
+            })}
           </div>
         )}
       </CardContent>
