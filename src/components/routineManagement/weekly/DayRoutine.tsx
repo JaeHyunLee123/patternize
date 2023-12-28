@@ -8,9 +8,7 @@ interface DayRoutineProps {
 }
 
 const DayRoutine: FC<DayRoutineProps> = ({ routines, day }) => {
-  const thisDayRoutines = routines?.filter((routine) => {
-    routine.day === day;
-  });
+  const thisDayRoutines = routines?.filter((routine) => routine.day === day);
 
   return (
     <div>
