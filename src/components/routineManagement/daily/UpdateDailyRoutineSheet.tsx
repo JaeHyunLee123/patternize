@@ -16,7 +16,7 @@ import {
   QueryObserverResult,
   useMutation,
 } from "@tanstack/react-query";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/Separator";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@radix-ui/react-label";
 import { useForm } from "react-hook-form";
