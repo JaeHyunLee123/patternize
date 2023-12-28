@@ -49,7 +49,6 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
     formState: { errors },
     reset,
     handleSubmit,
-    getValues,
     setValue,
   } = useForm<CreateWeeklyRoutineForm>({ mode: "onChange" });
 
@@ -79,9 +78,6 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
   const onSubmit = (form: CreateWeeklyRoutineForm) => {
     mutate(form);
   };
-
-  const form = getValues();
-  console.log(form);
 
   return (
     <Dialog>
