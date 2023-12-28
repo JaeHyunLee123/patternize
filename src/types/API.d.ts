@@ -9,6 +9,6 @@ export interface GetDailyRoutinesAPI extends StandardAPI {
   dailyRoutines: DailyRoutine[]?;
 }
 
-export interface GetDailyRoutinesAPI extends StandardAPI {
+export interface GetWeeklyRoutinesAPI extends StandardAPI {
   weeklyRoutines: WeeklyRoutine[]?;
 }
