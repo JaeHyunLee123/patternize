@@ -17,9 +17,15 @@ import {
   SelectTrigger,
   SelectItem,
 } from "@/components/ui/Select";
+import { useToast } from "@/hook/use-toast";
 import { Day } from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
+import {
+  RefetchOptions,
+  QueryObserverResult,
+  useMutation,
+} from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 
@@ -31,16 +37,51 @@ interface CreateWeeklyRoutineModalProps {
 
 interface CreateWeeklyRoutineForm {
   content: string;
-  day: Day;
+  day: string;
 }
 
 const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
   refetch,
 }) => {
+  const { toast } = useToast();
   const {
     register,
     formState: { errors },
+    reset,
+    handleSubmit,
+    getValues,
+    setValue,
   } = useForm<CreateWeeklyRoutineForm>({ mode: "onChange" });
+
+  const { mutate } = useMutation({
+    mutationFn: (form: CreateWeeklyRoutineForm) => {
+      return axios.post("/api/routine/weekly", form);
+    },
+    onSuccess: () => {
+      reset();
+      refetch();
+      toast({
+        title: "Create Weekly Routine Success!",
+        className: "bg-green-300",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Create Weekly Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const onSubmit = (form: CreateWeeklyRoutineForm) => {
+    mutate(form);
+  };
+
+  const form = getValues();
+  console.log(form);
 
   return (
     <Dialog>
@@ -52,10 +93,17 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
           <DialogTitle>Create Weekly Routine</DialogTitle>
         </DialogHeader>
 
-        <form className="flex flex-col space-y-2 items-center">
+        <form
+          className="flex flex-col space-y-2 items-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="w-full">
             <Label htmlFor="day">Select a day</Label>
-            <Select {...register("day", { required: true })}>
+            <Select
+              onValueChange={(value) => {
+                setValue("day", value);
+              }}
+            >
               <SelectTrigger id="day">
                 <SelectValue placeholder="DAY" />
               </SelectTrigger>

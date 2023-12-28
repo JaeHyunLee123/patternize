@@ -68,6 +68,8 @@ export const POST = async (req: Request) => {
   try {
     const session = await getAuthSession();
 
+    console.log("hello");
+
     if (!session?.user)
       return Response.json(
         { errorMessage: "Unauthorized", ok: false },

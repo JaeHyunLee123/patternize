@@ -39,7 +39,7 @@ const CreateDailyRoutineModal = ({ refetch }: CreateDailyRoutineModalProps) => {
     formState: { errors },
   } = useForm<CreateDailyRoutineForm>({ mode: "onChange" });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (form: CreateDailyRoutineForm) => {
       return axios.post("/api/routine/daily", form);
     },

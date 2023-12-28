@@ -33,12 +33,12 @@ const ShowWeeklyRoutineCard: FC = () => {
           <p>Loading data...</p>
         ) : (
           <div className="flex flex-col">
-            {days.map((day) => {
+            {days.map((day, i) => {
               return (
-                <>
+                <div key={i}>
                   <DayRoutine routines={data?.weeklyRoutines} day={day} />
                   <Separator />
-                </>
+                </div>
               );
             })}
           </div>
