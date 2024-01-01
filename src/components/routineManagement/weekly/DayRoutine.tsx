@@ -14,7 +14,7 @@ const DayRoutine: FC<DayRoutineProps> = ({ routines, day }) => {
     <div>
       <p className="text-lg font-medium">{day}</p>
       {!thisDayRoutines || thisDayRoutines.length === 0 ? (
-        <p>No routine</p>
+        <p className="text-sm">No routine</p>
       ) : (
         thisDayRoutines.map((routine) => (
           <p key={routine.id}>{routine.content}</p>

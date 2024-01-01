@@ -140,13 +140,29 @@ model DailyRoutine {
   @@index([routineControlId])
 }
 
+model Days {
+  id String @id @default(cuid())
+
+  sun Boolean @default(false)
+  mon Boolean @default(false)
+  tue Boolean @default(false)
+  wed Boolean @default(false)
+  thu Boolean @default(false)
+  fri Boolean @default(false)
+  sat Boolean @default(false)
+
+  WeeklyRoutine WeeklyRoutine[]
+}
+
 model WeeklyRoutine {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   content String @db.VarChar(200)
-  day     Day
+
+  days   Days   @relation(fields: [daysId], references: [id])
+  daysId String
 
   routines Routine[]
 
@@ -154,6 +170,7 @@ model WeeklyRoutine {
   routineControlId String?
 
   @@index([routineControlId])
+  @@index([daysId])
 }
 
 model MonthlyRoutine {
