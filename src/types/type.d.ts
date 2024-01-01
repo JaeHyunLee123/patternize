@@ -1,4 +1,4 @@
-interface Days {
+interface IsDays {
   sun: boolean;
   mon: boolean;
   tue: boolean;

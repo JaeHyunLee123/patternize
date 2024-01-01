@@ -2,7 +2,6 @@ import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createRoutineControl } from "@/lib/server-utils";
 import { GetWeeklyRoutinesAPI } from "@/types/API";
-import { Day } from "@prisma/client";
 
 export const GET = async (req: Request) => {
   try {
@@ -27,7 +26,11 @@ export const GET = async (req: Request) => {
         userId,
       },
       include: {
-        weeklyRoutines: true,
+        weeklyRoutines: {
+          include: {
+            days: true,
+          },
+        },
       },
     });
 
@@ -38,7 +41,11 @@ export const GET = async (req: Request) => {
           userId,
         },
         include: {
-          weeklyRoutines: true,
+          weeklyRoutines: {
+            include: {
+              days: true,
+            },
+          },
         },
       });
     }
