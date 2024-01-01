@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectItem,
 } from "@/components/ui/Select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup";
 import { useToast } from "@/hook/use-toast";
 import { Day } from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -94,25 +95,16 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="w-full">
-            <Label htmlFor="day">Select a day</Label>
-            <Select
-              onValueChange={(value) => {
-                setValue("day", value);
-              }}
-            >
-              <SelectTrigger id="day">
-                <SelectValue placeholder="DAY" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={Day.SUN}>SUN</SelectItem>
-                <SelectItem value={Day.MON}>MON</SelectItem>
-                <SelectItem value={Day.TUE}>TUE</SelectItem>
-                <SelectItem value={Day.WED}>WED</SelectItem>
-                <SelectItem value={Day.THU}>THU</SelectItem>
-                <SelectItem value={Day.FRI}>FRI</SelectItem>
-                <SelectItem value={Day.SAT}>SAT</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="day">Select days</Label>
+            <ToggleGroup type="multiple">
+              <ToggleGroupItem value="sun">Sun</ToggleGroupItem>
+              <ToggleGroupItem value="mon">Mon</ToggleGroupItem>
+              <ToggleGroupItem value="tue">Tue</ToggleGroupItem>
+              <ToggleGroupItem value="wed">Wed</ToggleGroupItem>
+              <ToggleGroupItem value="thu">Thu</ToggleGroupItem>
+              <ToggleGroupItem value="fri">Fri</ToggleGroupItem>
+              <ToggleGroupItem value="sat">Sat</ToggleGroupItem>
+            </ToggleGroup>
           </div>
           <div className="w-full">
             <Label htmlFor="routine">Routine</Label>
