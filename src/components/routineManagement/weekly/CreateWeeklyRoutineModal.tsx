@@ -10,16 +10,8 @@ import {
 } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import {
-  Select,
-  SelectValue,
-  SelectContent,
-  SelectTrigger,
-  SelectItem,
-} from "@/components/ui/Select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup";
 import { useToast } from "@/hook/use-toast";
-import { Day } from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import {
   RefetchOptions,
@@ -27,7 +19,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface CreateWeeklyRoutineModalProps {
@@ -38,7 +30,7 @@ interface CreateWeeklyRoutineModalProps {
 
 interface CreateWeeklyRoutineForm {
   content: string;
-  day: string;
+  days: string[];
 }
 
 const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
@@ -50,8 +42,9 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
     formState: { errors },
     reset,
     handleSubmit,
-    setValue,
   } = useForm<CreateWeeklyRoutineForm>({ mode: "onChange" });
+
+  const [days] = useState<string[]>();
 
   const { mutate } = useMutation({
     mutationFn: (form: CreateWeeklyRoutineForm) => {
@@ -77,6 +70,17 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
   });
 
   const onSubmit = (form: CreateWeeklyRoutineForm) => {
+    if (!days || days.length === 0) {
+      toast({
+        title: "Please select at least one day",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
+    form.days = days;
+
     mutate(form);
   };
 
@@ -96,7 +100,13 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
         >
           <div className="w-full">
             <Label htmlFor="day">Select days</Label>
-            <ToggleGroup type="multiple">
+            <ToggleGroup
+              type="multiple"
+              value={days}
+              onValueChange={(days) => {
+                console.log(days);
+              }}
+            >
               <ToggleGroupItem value="sun">Sun</ToggleGroupItem>
               <ToggleGroupItem value="mon">Mon</ToggleGroupItem>
               <ToggleGroupItem value="tue">Tue</ToggleGroupItem>

@@ -7,7 +7,6 @@ import axios from "axios";
 import type { GetWeeklyRoutinesAPI } from "@/types/API";
 import { Separator } from "@/components/ui/Separator";
 import DayRoutine from "./DayRoutine";
-import { Day } from "@prisma/client";
 import CreateWeeklyRoutineModal from "./CreateWeeklyRoutineModal";
 
 const ShowWeeklyRoutineCard: FC = () => {
@@ -20,8 +19,6 @@ const ShowWeeklyRoutineCard: FC = () => {
     },
   });
 
-  const days = [Day.SUN, Day.MON, Day.TUE, Day.WED, Day.THU, Day.FRI, Day.SAT];
-
   return (
     <Card>
       <CardHeader className="flex items-center flex-row space-x-6">
@@ -32,16 +29,7 @@ const ShowWeeklyRoutineCard: FC = () => {
         {isPending ? (
           <p>Loading data...</p>
         ) : (
-          <div className="flex flex-col">
-            {days.map((day, i) => {
-              return (
-                <div key={i}>
-                  <DayRoutine routines={data?.weeklyRoutines} day={day} />
-                  <Separator />
-                </div>
-              );
-            })}
-          </div>
+          <div className="flex flex-col"></div>
         )}
       </CardContent>
     </Card>
