@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/Separator";
 import DayRoutine from "./DayRoutine";
 import CreateWeeklyRoutineModal from "./CreateWeeklyRoutineModal";
 
+const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
 const ShowWeeklyRoutineCard: FC = () => {
   const { data, isPending, refetch } = useQuery<GetWeeklyRoutinesAPI>({
     queryKey: ["weekly routines"],
@@ -29,7 +31,14 @@ const ShowWeeklyRoutineCard: FC = () => {
         {isPending ? (
           <p>Loading data...</p>
         ) : (
-          <div className="flex flex-col"></div>
+          <div className="flex flex-col">
+            {days.map((day) => (
+              <div key={day}>
+                <DayRoutine routines={data?.weeklyRoutines} day={day} />
+                <Separator />
+              </div>
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>
