@@ -2,7 +2,6 @@ import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createRoutineControl } from "@/lib/server-utils";
 import { GetWeeklyRoutinesAPI } from "@/types/API";
-import { Day } from "@prisma/client";
 
 export const GET = async (req: Request) => {
   try {
@@ -27,7 +26,11 @@ export const GET = async (req: Request) => {
         userId,
       },
       include: {
-        weeklyRoutines: true,
+        weeklyRoutines: {
+          include: {
+            days: true,
+          },
+        },
       },
     });
 
@@ -38,7 +41,11 @@ export const GET = async (req: Request) => {
           userId,
         },
         include: {
-          weeklyRoutines: true,
+          weeklyRoutines: {
+            include: {
+              days: true,
+            },
+          },
         },
       });
     }
@@ -66,17 +73,9 @@ export const GET = async (req: Request) => {
 
 export const POST = async (req: Request) => {
   try {
-    const session = await getAuthSession();
-
-    if (!session?.user)
-      return Response.json(
-        { errorMessage: "Unauthorized", ok: false },
-        { status: 401 }
-      );
-
     const body = await req.json();
 
-    const { content, day } = body;
+    const { content, days } = body;
 
     if (!content || typeof content !== "string")
       return Response.json(
@@ -84,16 +83,25 @@ export const POST = async (req: Request) => {
         { status: 400 }
       );
 
-    if (!day || !Object.values(Day).includes(day))
+    if (!days || !Array.isArray(days) || days.length === 0) {
       return Response.json(
-        { errorMessage: "Need day", ok: false },
+        { errorMessage: "Need days", ok: false },
         { status: 400 }
       );
+    }
 
     if (!(1 < content.length && content.length < 201))
       return Response.json(
         { errorMessage: "Invalid content", ok: false },
         { status: 400 }
+      );
+
+    const session = await getAuthSession();
+
+    if (!session?.user)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
       );
 
     const routineControl = await db.routineControl.findUnique({
@@ -111,11 +119,26 @@ export const POST = async (req: Request) => {
         { status: 500 }
       );
 
+    const newDays = await db.days.create({
+      data: {
+        sun: days.includes("sun"),
+        mon: days.includes("mon"),
+        tue: days.includes("tue"),
+        wed: days.includes("wed"),
+        thu: days.includes("thu"),
+        fri: days.includes("fri"),
+        sat: days.includes("sat"),
+      },
+      select: {
+        id: true,
+      },
+    });
+
     await db.weeklyRoutine.create({
       data: {
         content,
         routineControlId: routineControl.id,
-        day,
+        daysId: newDays.id,
       },
     });
 

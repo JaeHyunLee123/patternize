@@ -72,16 +72,6 @@ enum RoutineType {
   MONTHLY
 }
 
-enum Day {
-  MON
-  TUE
-  WED
-  THU
-  FRI
-  SAT
-  SUN
-}
-
 model RoutineControl {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -140,13 +130,30 @@ model DailyRoutine {
   @@index([routineControlId])
 }
 
+model Days {
+  id String @id @default(cuid())
+
+  sun Boolean @default(false)
+  mon Boolean @default(false)
+  tue Boolean @default(false)
+  wed Boolean @default(false)
+  thu Boolean @default(false)
+  fri Boolean @default(false)
+  sat Boolean @default(false)
+
+  WeeklyRoutine  WeeklyRoutine[]
+  MonthlyRoutine MonthlyRoutine[]
+}
+
 model WeeklyRoutine {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   content String @db.VarChar(200)
-  day     Day
+
+  days   Days   @relation(fields: [daysId], references: [id])
+  daysId String
 
   routines Routine[]
 
@@ -154,6 +161,7 @@ model WeeklyRoutine {
   routineControlId String?
 
   @@index([routineControlId])
+  @@index([daysId])
 }
 
 model MonthlyRoutine {
@@ -164,7 +172,7 @@ model MonthlyRoutine {
   //User will choose one way to manage monthly routine.
   //One option is manage by nthWeek and day another is by date.
   nthWeek Int?   @db.SmallInt
-  day     Day?
+  day     Days?  @relation(fields: [daysId], references: [id])
   date    Int?   @db.SmallInt
   content String @db.VarChar(200)
 
@@ -172,6 +180,8 @@ model MonthlyRoutine {
 
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
+  daysId           String?
 
   @@index([routineControlId])
+  @@index([daysId])
 }
