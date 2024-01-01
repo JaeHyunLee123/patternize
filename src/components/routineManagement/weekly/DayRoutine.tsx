@@ -1,14 +1,24 @@
 import { FC } from "react";
 
-import type { Day, WeeklyRoutine } from "@prisma/client";
+import type { Day, WeeklyRoutine, Days } from "@prisma/client";
+import { isDayMatch } from "@/lib/utils";
+
+interface WeeklyRoutineWithDays extends WeeklyRoutine {
+  days: Days;
+}
 
 interface DayRoutineProps {
-  routines?: WeeklyRoutine[] | null;
+  routines?: WeeklyRoutineWithDays[] | null;
   day: Day;
 }
 
 const DayRoutine: FC<DayRoutineProps> = ({ routines, day }) => {
-  const thisDayRoutines = routines?.filter((routine) => routine.day === day);
+  const thisDayRoutines = routines?.filter((routine) =>
+    isDayMatch({
+      days: routine.days,
+      day: day,
+    })
+  );
 
   return (
     <div>
