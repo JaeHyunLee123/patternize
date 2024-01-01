@@ -44,7 +44,7 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
     handleSubmit,
   } = useForm<CreateWeeklyRoutineForm>({ mode: "onChange" });
 
-  const [days] = useState<string[]>();
+  const [days, setState] = useState<string[]>();
 
   const { mutate } = useMutation({
     mutationFn: (form: CreateWeeklyRoutineForm) => {
@@ -104,7 +104,7 @@ const CreateWeeklyRoutineModal: FC<CreateWeeklyRoutineModalProps> = ({
               type="multiple"
               value={days}
               onValueChange={(days) => {
-                console.log(days);
+                setState(days);
               }}
             >
               <ToggleGroupItem value="sun">Sun</ToggleGroupItem>
