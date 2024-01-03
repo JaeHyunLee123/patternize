@@ -13,6 +13,7 @@ import {
 import { WeeklyRoutine, Days } from "@prisma/client";
 import { FC } from "react";
 import DeleteWeeklyRoutineModal from "./DeleteWeeklyRoutineModal";
+import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
 
 interface WeeklyRoutineWithDays extends WeeklyRoutine {
   days: Days;
@@ -20,10 +21,14 @@ interface WeeklyRoutineWithDays extends WeeklyRoutine {
 
 interface UpdateWeeklyRoutineSheetProps {
   routine: WeeklyRoutineWithDays;
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
 const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
   routine,
+  refetch,
 }) => {
   return (
     <Sheet>
@@ -39,7 +44,10 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
           <Separator />
           <div className="flex items-center space-x-2 justify-between">
             <span className="text-foreground text-lg">Delete Routine</span>
-            <DeleteWeeklyRoutineModal routineId={routine.id} />
+            <DeleteWeeklyRoutineModal
+              routineId={routine.id}
+              refetch={refetch}
+            />
           </div>
         </SheetHeader>
       </SheetContent>

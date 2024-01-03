@@ -24,11 +24,40 @@ import { FC } from "react";
 
 interface DeleteWeeklyRoutineModalProps {
   routineId: string;
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
 const DeleteWeeklyRoutineModal: FC<DeleteWeeklyRoutineModalProps> = ({
   routineId,
+  refetch,
 }) => {
+  const { toast } = useToast();
+
+  const { mutate } = useMutation({
+    mutationFn: () => {
+      const payload = { routineId };
+      return axios.delete("/api/routine/weekly", { data: payload });
+    },
+    onSuccess: () => {
+      refetch();
+      toast({
+        title: "Delete Daily Routine!",
+        className: "bg-red-300",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Delete Daily Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>

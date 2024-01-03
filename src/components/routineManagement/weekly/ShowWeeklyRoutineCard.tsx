@@ -34,7 +34,11 @@ const ShowWeeklyRoutineCard: FC = () => {
           <div className="flex flex-col">
             {days.map((day) => (
               <div key={day}>
-                <DayRoutine routines={data?.weeklyRoutines} day={day} />
+                <DayRoutine
+                  routines={data?.weeklyRoutines}
+                  day={day}
+                  refetch={refetch}
+                />
                 <Separator />
               </div>
             ))}
