@@ -38,7 +38,7 @@ interface UpdateWeeklyRoutineSheetProps {
 }
 
 interface UpdateWeeklyRoutineForm {
-  content: string;
+  newContent: string;
   days: string[];
   id: string;
 }
@@ -131,7 +131,7 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
               <Label htmlFor="routine">Routine</Label>
               <Input
                 id="routine"
-                {...register("content", {
+                {...register("newContent", {
                   required: "Please write routine.",
                   minLength: {
                     value: 2,
@@ -144,7 +144,7 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
                 })}
               />
               <span className="text-red-500">
-                {errors.content ? errors.content.message : ""}
+                {errors.newContent ? errors.newContent.message : ""}
               </span>
             </div>
             <SheetClose asChild>
