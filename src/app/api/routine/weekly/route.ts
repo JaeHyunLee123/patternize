@@ -150,3 +150,58 @@ export const POST = async (req: Request) => {
     );
   }
 };
+
+export const DELETE = async (req: Request) => {
+  try {
+    const body = await req.json();
+    const { routineId } = body;
+
+    if (!routineId || typeof routineId !== "string")
+      return Response.json(
+        { errorMessage: "Need routineId", ok: false },
+        { status: 400 }
+      );
+
+    const session = await getAuthSession();
+
+    if (!session?.user)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
+
+    const routine = await db.weeklyRoutine.findUnique({
+      where: {
+        id: routineId,
+      },
+      include: {
+        routineControl: true,
+      },
+    });
+
+    if (!routine || !routine.routineControlId)
+      return Response.json(
+        { errorMessage: "Cannot find routine", ok: false },
+        { status: 500 }
+      );
+
+    if (session.user.id !== routine.routineControl?.userId)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
+
+    await db.weeklyRoutine.delete({
+      where: {
+        id: routineId,
+      },
+    });
+
+    return Response.json({ ok: true }, { status: 201 });
+  } catch (error) {
+    return Response.json(
+      { errorMessage: "Unknown Error", ok: false },
+      { status: 500 }
+    );
+  }
+};
