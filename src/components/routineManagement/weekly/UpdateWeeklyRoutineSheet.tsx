@@ -40,7 +40,7 @@ interface UpdateWeeklyRoutineSheetProps {
 interface UpdateWeeklyRoutineForm {
   newContent: string;
   days: string[];
-  id: string;
+  routineId: string;
 }
 
 const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
@@ -49,8 +49,8 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
 }) => {
   const { toast } = useToast();
 
-  const {} = useMutation({
-    mutationFn: (form) => {
+  const { mutate } = useMutation({
+    mutationFn: (form: UpdateWeeklyRoutineForm) => {
       return axios.put("/api/routine/weekly", form);
     },
     onSuccess: () => {
@@ -90,8 +90,10 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
 
       return;
     }
-    form.id = routine.id;
+    form.routineId = routine.id;
     form.days = days;
+
+    mutate(form);
   };
 
   return (
@@ -149,7 +151,7 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
             </div>
             <SheetClose asChild>
               <Button type="submit" className="w-[50%]" variant={"outline"}>
-                Create
+                Update
               </Button>
             </SheetClose>
           </form>
