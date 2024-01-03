@@ -155,7 +155,6 @@ export const DELETE = async (req: Request) => {
         { status: 401 }
       );
 
-    //error here
     await db.dailyRoutine.delete({
       where: {
         id: routineId,
