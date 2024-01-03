@@ -74,7 +74,14 @@ const DeleteWeeklyRoutineModal: FC<DeleteWeeklyRoutineModalProps> = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <SheetClose asChild>
-            <AlertDialogAction>Delete</AlertDialogAction>
+            <AlertDialogAction
+              className={buttonVariants({ variant: "destructive" })}
+              onClick={() => {
+                mutate();
+              }}
+            >
+              Delete
+            </AlertDialogAction>
           </SheetClose>
         </AlertDialogFooter>
       </AlertDialogContent>
