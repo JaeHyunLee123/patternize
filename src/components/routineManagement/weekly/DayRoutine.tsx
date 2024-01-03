@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import type { WeeklyRoutine, Days } from "@prisma/client";
 import { isDayMatch } from "@/lib/utils";
+import UpdateWeeklyRoutineSheet from "./UpdateWeeklyRoutineSheet";
 
 interface WeeklyRoutineWithDays extends WeeklyRoutine {
   days: Days;
@@ -22,12 +23,12 @@ const DayRoutine: FC<DayRoutineProps> = ({ routines, day }) => {
 
   return (
     <div>
-      <p className="text-lg font-medium">{day}</p>
+      <p className="text-xl font-medium">{day}</p>
       {!thisDayRoutines || thisDayRoutines.length === 0 ? (
-        <p className="text-sm">No routine</p>
+        <p className="text-sm">-</p>
       ) : (
         thisDayRoutines.map((routine) => (
-          <p key={routine.id}>{routine.content}</p>
+          <UpdateWeeklyRoutineSheet routine={routine} key={routine.id} />
         ))
       )}
     </div>
