@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet";
 import { WeeklyRoutine, Days } from "@prisma/client";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import DeleteWeeklyRoutineModal from "./DeleteWeeklyRoutineModal";
 import {
   RefetchOptions,
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/Input";
+import { getDaysStringArr } from "@/lib/utils";
 
 interface WeeklyRoutineWithDays extends WeeklyRoutine {
   days: Days;
@@ -119,6 +120,7 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
                 onValueChange={(days) => {
                   setDays(days);
                 }}
+                defaultValue={getDaysStringArr(routine.days)}
               >
                 <ToggleGroupItem value="sun">Sun</ToggleGroupItem>
                 <ToggleGroupItem value="mon">Mon</ToggleGroupItem>

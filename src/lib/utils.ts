@@ -1,7 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { db } from "./db";
-import { Prisma } from "@prisma/client";
 
 import type { Days } from "@prisma/client";
 
@@ -28,4 +26,24 @@ export const isDayMatch = ({ days, day }: { days: Days; day: string }) => {
     default:
       return false;
   }
+};
+
+export const getDaysStringArr = (days: Days) => {
+  const result: string[] = [];
+
+  for (const day in days) {
+    if (
+      day === "sun" ||
+      day === "mon" ||
+      day === "tue" ||
+      day === "wed" ||
+      day === "thu" ||
+      day === "fri" ||
+      day === "sat"
+    ) {
+      if (days[day]) result.push(day);
+    }
+  }
+
+  return result;
 };
