@@ -130,9 +130,10 @@ const UpdateWeeklyRoutineSheet: FC<UpdateWeeklyRoutineSheetProps> = ({
               </ToggleGroup>
             </div>
             <div className="w-full">
-              <Label htmlFor="routine">Routine</Label>
+              <Label htmlFor="routine">New Routine</Label>
               <Input
                 id="routine"
+                defaultValue={routine.content}
                 {...register("newContent", {
                   required: "Please write routine.",
                   minLength: {

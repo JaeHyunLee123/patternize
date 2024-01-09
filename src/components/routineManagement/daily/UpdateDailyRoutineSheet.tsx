@@ -98,11 +98,10 @@ const UpdateDailyRoutineSheet = ({
         </SheetHeader>
         <div className="felx flex-col space-y-4 mt-4">
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-            <Label htmlFor="newContent">New Routine Content</Label>
+            <Label htmlFor="newContent">New Routine</Label>
             <div className="flex items-center justify-between space-x-2 mt-1">
               <div className="flex flex-col space-y-1 w-full">
                 <Input
-                  placeholder="New Content"
                   id="newContent"
                   {...register("newContent", {
                     required: "Please write new routine.",
@@ -116,6 +115,7 @@ const UpdateDailyRoutineSheet = ({
                     },
                   })}
                   className="w-full"
+                  defaultValue={routineContent}
                 />
                 <span className="text-red-500">
                   {errors.newContent ? errors.newContent.message : ""}
