@@ -1,11 +1,13 @@
 import ShowDailyRoutineCard from "./routineManagement/daily/ShowDailyRoutineCard";
+import ShowMonthlyRoutineCard from "./routineManagement/monthly/ShowMonthlyRoutineCard";
 import ShowWeeklyRoutineCard from "./routineManagement/weekly/ShowWeeklyRoutineCard";
 
 const Routines = () => {
   return (
-    <div className="flex gap-2 w-full">
+    <div className="grid grid-cols-2 gap-2 w-full">
       <ShowDailyRoutineCard />
       <ShowWeeklyRoutineCard />
+      <ShowMonthlyRoutineCard className="col-span-2" />
     </div>
   );
 };

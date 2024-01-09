@@ -31,9 +31,9 @@ const ShowWeeklyRoutineCard: FC = () => {
         {isPending ? (
           <p>Loading data...</p>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-2">
             {days.map((day) => (
-              <div key={day}>
+              <div key={day} className="space-y-1">
                 <DayRoutine
                   routines={data?.weeklyRoutines}
                   day={day}
