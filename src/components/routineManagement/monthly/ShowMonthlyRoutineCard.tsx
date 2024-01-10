@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Separator } from "@/components/ui/Separator";
 import { FC } from "react";
+import CreateMonthlyRoutineModal from "./CreateMonthlyRoutineModal";
 
 interface ShowMonthlyRoutineCardProps {
   className?: string;
@@ -13,8 +14,9 @@ const ShowMonthlyRoutineCard: FC<ShowMonthlyRoutineCardProps> = ({
 }) => {
   return (
     <Card className={className}>
-      <CardHeader>
+      <CardHeader className="flex items-center flex-row space-x-6">
         <CardTitle>Monthly Routines</CardTitle>
+        <CreateMonthlyRoutineModal />
       </CardHeader>
       <CardContent className="flex justify-between">
         <div className="w-[50%] border-r-2 border-gray-200">
