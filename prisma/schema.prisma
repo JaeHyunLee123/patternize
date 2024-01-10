@@ -151,8 +151,7 @@ model Days {
   fri Boolean @default(false)
   sat Boolean @default(false)
 
-  WeeklyRoutine  WeeklyRoutine[]
-  MonthlyRoutine MonthlyRoutine[]
+  WeeklyRoutine WeeklyRoutine[]
 }
 
 model WeeklyRoutine {
@@ -179,21 +178,17 @@ model MonthlyRoutine {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //User will choose one(or both) way to manage monthly routine.
-  weeksAndDays WeekAndDay[]
-  dates        Date[]
-  content      String       @db.VarChar(200)
+  //User will choose one way to manage monthly routine.
+  weekAndDay WeekAndDay?
+  date       Date?
+  content    String      @db.VarChar(200)
 
   routines Routine[]
 
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
-  daysId           String?
-
-  Days Days? @relation(fields: [daysId], references: [id])
 
   @@index([routineControlId])
-  @@index([daysId])
 }
 
 model WeekAndDay {
@@ -203,7 +198,7 @@ model WeekAndDay {
   week Int
 
   monthlyRoutine   MonthlyRoutine @relation(fields: [monthlyRoutineId], references: [id])
-  monthlyRoutineId String
+  monthlyRoutineId String         @unique
 
   @@index([monthlyRoutineId])
 }
@@ -214,7 +209,7 @@ model Date {
   date Int
 
   monthlyRoutine   MonthlyRoutine @relation(fields: [monthlyRoutineId], references: [id])
-  monthlyRoutineId String
+  monthlyRoutineId String         @unique
 
   @@index([monthlyRoutineId])
 }
