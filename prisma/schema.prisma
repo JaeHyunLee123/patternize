@@ -199,8 +199,8 @@ model WeekAndDay {
   day  Day
   week Int
 
-  monthlyRoutine   MonthlyRoutine @relation(fields: [monthlyRoutineId], references: [id])
-  monthlyRoutineId String         @unique
+  monthlyRoutine   MonthlyRoutine? @relation(fields: [monthlyRoutineId], references: [id])
+  monthlyRoutineId String?         @unique
 
   @@index([monthlyRoutineId])
 }
@@ -210,8 +210,8 @@ model Date {
 
   date Int
 
-  monthlyRoutine   MonthlyRoutine @relation(fields: [monthlyRoutineId], references: [id])
-  monthlyRoutineId String         @unique
+  monthlyRoutine   MonthlyRoutine? @relation(fields: [monthlyRoutineId], references: [id])
+  monthlyRoutineId String?         @unique
 
   @@index([monthlyRoutineId])
 }
