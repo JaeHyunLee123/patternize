@@ -167,12 +167,12 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
                 <OnlyDatePicker classname="mt-2" onChange={setDate} />
                 <span className="text-xs text-gray-500">
                   {date > "28"
-                    ? "This routine will apear at 28th on February"
+                    ? "This routine will be shown at 28th on February"
                     : ""}
                 </span>
                 <span className="text-xs text-gray-500">
                   {date === "31"
-                    ? "This routine will apear at 30th on April, June , September, November"
+                    ? "This routine will be shown at 30th on April, June , September and November"
                     : ""}
                 </span>
               </div>
