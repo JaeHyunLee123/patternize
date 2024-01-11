@@ -17,6 +17,13 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  useMutation,
+} from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { useToast } from "@/hook/use-toast";
 
 interface CreateMonthlyRoutineModalProps {}
 
@@ -25,7 +32,7 @@ interface CreateMontyleRoutineForm {
   content: string;
 
   week?: number;
-  day?: number;
+  day?: string;
 
   date?: number;
 }
@@ -33,6 +40,7 @@ interface CreateMontyleRoutineForm {
 type monthlyRoutineType = "weekAndDay" | "date";
 
 const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
+  const { toast } = useToast();
   const [routineType, setRoutineType] =
     useState<monthlyRoutineType>("weekAndDay");
 
@@ -47,6 +55,49 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
     handleSubmit,
   } = useForm<CreateMontyleRoutineForm>({ mode: "onChange" });
 
+  const { mutate } = useMutation({
+    mutationFn: (form: CreateMontyleRoutineForm) => {
+      return axios.post("api/routine/monthly", form);
+    },
+    onSuccess: () => {
+      reset();
+      //TODO: add refetch func after implementing show monthly routine
+      //refetch();
+      toast({
+        title: "Create Weekly Routine Success!",
+        className: "bg-green-300",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Create Weekly Routine Failed!",
+          description: String(error.response?.data.errorMessage),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const onSubmit = (form: CreateMontyleRoutineForm) => {
+    if (routineType === "weekAndDay") {
+      form.week = Number(week);
+      form.day = day;
+      form.isDate = false;
+
+      if (!(1 <= form.week && form.week <= 4)) return;
+
+      mutate(form);
+    } else {
+      form.date = Number(date);
+      form.isDate = true;
+
+      if (!(1 <= form.date || form.date <= 31)) return;
+
+      mutate(form);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -57,7 +108,10 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
           <DialogTitle>Create Monthly Routine</DialogTitle>
         </DialogHeader>
 
-        <form className="flex flex-col items-center space-y-3">
+        <form
+          className="flex flex-col items-center space-y-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Tabs
             className="w-full"
             onValueChange={(type) => {
@@ -109,7 +163,19 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
               value="date"
               className="flex items-center justify-center"
             >
-              <OnlyDatePicker classname="mt-2" onChange={setDate} />
+              <div className="flex flex-col items-center space-y-2">
+                <OnlyDatePicker classname="mt-2" onChange={setDate} />
+                <span className="text-xs text-gray-500">
+                  {date > "28"
+                    ? "This routine will apear at 28th on February"
+                    : ""}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {date === "31"
+                    ? "This routine will apear at 30th on April, June , September, November"
+                    : ""}
+                </span>
+              </div>
             </TabsContent>
           </Tabs>
           <div className="w-full">
