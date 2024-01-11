@@ -179,9 +179,11 @@ model MonthlyRoutine {
   updatedAt DateTime @updatedAt
 
   //User will choose one way to manage monthly routine.
+  isDate     Boolean
   weekAndDay WeekAndDay?
   date       Date?
-  content    String      @db.VarChar(200)
+
+  content String @db.VarChar(200)
 
   routines Routine[]
 
