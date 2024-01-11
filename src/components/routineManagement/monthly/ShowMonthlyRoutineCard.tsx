@@ -7,6 +7,7 @@ import CreateMonthlyRoutineModal from "./CreateMonthlyRoutineModal";
 import { useQuery } from "@tanstack/react-query";
 import { GetMonthlyRoutineAPI } from "@/types/API";
 import axios from "axios";
+import UpdateMonthlyRoutineSheet from "./UpdateMonthlyRoutineSheet";
 
 interface ShowMonthlyRoutineCardProps {
   className?: string;
@@ -55,7 +56,11 @@ const ShowMonthlyRoutineCard: FC<ShowMonthlyRoutineCardProps> = ({
                 ? "Loading..."
                 : data?.monthlyRoutinesWithWeekAndDay.map((routine) => (
                     <div key={routine.id} className="flex items-center">
-                      <span className="text-lg w-[60%]">{routine.content}</span>
+                      <UpdateMonthlyRoutineSheet
+                        routine={routine}
+                        refetch={refetch}
+                        classname="w-[60%]"
+                      />
                       <span className="text-sm ">{`${formNumber(
                         routine.weekAndDay?.week || 0
                       )} ${routine.weekAndDay?.day}`}</span>
@@ -71,7 +76,11 @@ const ShowMonthlyRoutineCard: FC<ShowMonthlyRoutineCardProps> = ({
               ? "Loading..."
               : data?.monthlyRoutinesWithDate.map((routine) => (
                   <div key={routine.id} className="flex items-center">
-                    <span className="text-lg w-[60%]">{routine.content}</span>
+                    <UpdateMonthlyRoutineSheet
+                      routine={routine}
+                      refetch={refetch}
+                      classname="w-[60%]"
+                    />
                     <span className="text-sm">
                       {`${formNumber(routine.date?.date || 0)} of every month`}
                     </span>
