@@ -1,17 +1,22 @@
 "use client";
 
-import { FC, useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { Button } from "./ui/Button";
 import { ToggleGroup, ToggleGroupItem } from "./ui/ToggleGroup";
 import { Calendar } from "lucide-react";
 
 interface OnlyDatePickerProps {
   classname?: string;
+  onChange?: Dispatch<SetStateAction<string>>;
 }
 
-const OnlyDatePicker: FC<OnlyDatePickerProps> = ({ classname }) => {
+const OnlyDatePicker: FC<OnlyDatePickerProps> = ({ classname, onChange }) => {
   const [date, setDate] = useState("");
+
+  useEffect(() => {
+    if (onChange) onChange(date);
+  }, [date, onChange]);
 
   const showDate = (date: string) => {
     let formedDate = "";
