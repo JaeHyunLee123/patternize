@@ -200,17 +200,15 @@ export const POST = async (req: Request) => {
         );
       }
 
-      const upperCaseDay = day.toUpperCase();
-
       if (
         !(
-          upperCaseDay === "SUN" ||
-          upperCaseDay === "MON" ||
-          upperCaseDay === "TUE" ||
-          upperCaseDay === "WED" ||
-          upperCaseDay === "THU" ||
-          upperCaseDay === "FRI" ||
-          upperCaseDay === "SAT"
+          day === "SUN" ||
+          day === "MON" ||
+          day === "TUE" ||
+          day === "WED" ||
+          day === "THU" ||
+          day === "FRI" ||
+          day === "SAT"
         )
       ) {
         return Response.json(
@@ -236,7 +234,7 @@ export const POST = async (req: Request) => {
       const newWeekAndDay = await db.weekAndDay.create({
         data: {
           week,
-          day: upperCaseDay,
+          day,
         },
         select: {
           id: true,

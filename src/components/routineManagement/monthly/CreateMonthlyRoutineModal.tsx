@@ -87,7 +87,7 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({
   const onSubmit = (form: CreateMontyleRoutineForm) => {
     if (routineType === "weekAndDay") {
       form.week = Number(week);
-      form.day = day;
+      form.day = day.toUpperCase();
       form.isDate = false;
 
       if (!(1 <= form.week && form.week <= 4)) return;
