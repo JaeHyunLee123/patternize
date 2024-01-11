@@ -1,3 +1,6 @@
+"use client";
+
+import { Separator } from "@/components/ui/Separator";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +16,7 @@ import {
 } from "@/types/API";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { FC } from "react";
+import DeleteMonthlyRoutineModal from "./DeleteMonthlyRoutineModal";
 
 interface UpdateMonthlyRoutineSheetProps {
   routine: MonthlyRoutineWithDate | MonthlyRoutineWithWeekAndDay;
@@ -44,6 +48,12 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
             You can update or delete routine here
           </SheetDescription>
         </SheetHeader>
+        <div>TODO: make form for update monthly routine</div>
+        <Separator />
+        <div className="flex items-center space-x-2 justify-between">
+          <span className="text-foreground text-lg">Delete Routine</span>
+          <DeleteMonthlyRoutineModal refetch={refetch} routineId={routine.id} />
+        </div>
       </SheetContent>
     </Sheet>
   );
