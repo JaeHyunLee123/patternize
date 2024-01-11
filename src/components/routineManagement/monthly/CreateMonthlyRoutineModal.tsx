@@ -25,7 +25,11 @@ import {
 import axios, { AxiosError } from "axios";
 import { useToast } from "@/hook/use-toast";
 
-interface CreateMonthlyRoutineModalProps {}
+interface CreateMonthlyRoutineModalProps {
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<unknown, Error>>;
+}
 
 interface CreateMontyleRoutineForm {
   isDate: boolean;
@@ -39,7 +43,9 @@ interface CreateMontyleRoutineForm {
 
 type monthlyRoutineType = "weekAndDay" | "date";
 
-const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
+const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({
+  refetch,
+}) => {
   const { toast } = useToast();
   const [routineType, setRoutineType] =
     useState<monthlyRoutineType>("weekAndDay");
@@ -61,8 +67,7 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({}) => {
     },
     onSuccess: () => {
       reset();
-      //TODO: add refetch func after implementing show monthly routine
-      //refetch();
+      refetch();
       toast({
         title: "Create Weekly Routine Success!",
         className: "bg-green-300",
