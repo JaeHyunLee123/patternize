@@ -1,7 +1,7 @@
 # My routine app
 
 This is routine web that can manage daily / weekly / monthly routines.
-This works on PC. Mobile version will be add after finishing pc version.
+This works on PC. Mobile version will be added after finish pc version.
 
 ## TODO
 
@@ -16,9 +16,10 @@ This works on PC. Mobile version will be add after finishing pc version.
 
 ## libraries
 
+- Next
 - prisma
 - tailwind css
-- chadcn
+- shadcn
 - tanstack query
 - next auth
 - react hook form
