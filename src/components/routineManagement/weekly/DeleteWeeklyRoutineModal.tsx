@@ -43,14 +43,14 @@ const DeleteWeeklyRoutineModal: FC<DeleteWeeklyRoutineModalProps> = ({
     onSuccess: () => {
       refetch();
       toast({
-        title: "Delete Daily Routine!",
+        title: "Delete Weekly Routine!",
         className: "bg-red-300",
       });
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         toast({
-          title: "Delete Daily Routine Failed!",
+          title: "Delete Weekly Routine Failed!",
           description: String(error.response?.data.errorMessage),
           variant: "destructive",
         });
