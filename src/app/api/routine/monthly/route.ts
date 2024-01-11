@@ -1,8 +1,123 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Day } from "@prisma/client";
+import { createRoutineControl } from "@/lib/server-utils";
+import { GetMonthlyRoutineAPI } from "@/types/API";
 
-export const GET = async (req: Request) => {};
+export const GET = async (req: Request) => {
+  try {
+    const session = await getAuthSession();
+
+    if (!session?.user)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
+
+    const userId = session.user.id;
+
+    if (!userId || typeof userId !== "string")
+      return Response.json(
+        { errorMessage: "Need userid", ok: false },
+        { status: 400 }
+      );
+
+    let routineControl = await db.routineControl.findUnique({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!routineControl) {
+      createRoutineControl(userId);
+      routineControl = await db.routineControl.findUnique({
+        where: {
+          userId,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
+    if (!routineControl)
+      return Response.json(
+        { errorMessage: "Cannot find routine", ok: false },
+        { status: 500 }
+      );
+
+    const monthlyRoutinesWithDate = await db.monthlyRoutine.findMany({
+      where: {
+        routineControlId: routineControl.id,
+        isDate: true,
+      },
+      include: {
+        date: true,
+      },
+      orderBy: {
+        date: {
+          date: "asc",
+        },
+      },
+    });
+
+    const monthlyRoutinesWithWeekAndDay = await db.monthlyRoutine.findMany({
+      where: {
+        routineControlId: routineControl.id,
+        isDate: false,
+      },
+      include: {
+        weekAndDay: true,
+      },
+    });
+
+    //sort by day
+    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    monthlyRoutinesWithWeekAndDay.sort((a, b) => {
+      const day1 = days.indexOf(a.weekAndDay?.day || "");
+      const day2 = days.indexOf(b.weekAndDay?.day || "");
+
+      if (day1 < day2) {
+        return -1;
+      }
+
+      if (day1 > day2) {
+        return 1;
+      }
+      return 0;
+    });
+    //sort by week
+    monthlyRoutinesWithWeekAndDay.sort((a, b) => {
+      const week1 = a.weekAndDay?.week || 0;
+      const week2 = b.weekAndDay?.week || 0;
+
+      if (week1 < week2) {
+        return -1;
+      }
+
+      if (week1 > week2) {
+        return 1;
+      }
+      return 0;
+    });
+
+    const responseData: GetMonthlyRoutineAPI = {
+      ok: true,
+      monthlyRoutinesWithDate,
+      monthlyRoutinesWithWeekAndDay,
+      errorMessage: "",
+    };
+
+    return Response.json(responseData, { status: 200 });
+  } catch (error) {
+    return Response.json(
+      { errorMessage: "Unknown Error", ok: false },
+      { status: 500 }
+    );
+  }
+};
 
 export const POST = async (req: Request) => {
   try {

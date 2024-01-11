@@ -1,4 +1,11 @@
-import type { DailyRoutine, Days, WeeklyRoutine } from "@prisma/client";
+import type {
+  DailyRoutine,
+  Date,
+  Days,
+  MonthlyRoutine,
+  WeekAndDay,
+  WeeklyRoutine,
+} from "@prisma/client";
 
 export interface StandardAPI {
   ok: boolean;
@@ -15,4 +22,17 @@ interface WeeklyRoutineWithDays extends WeeklyRoutine {
 
 export interface GetWeeklyRoutinesAPI extends StandardAPI {
   weeklyRoutines: WeeklyRoutineWithDays[]?;
+}
+
+interface MonthlyRoutineWithDate extends MonthlyRoutine {
+  date: Date | null;
+}
+
+interface MonthlyRoutineWithWeekAndDay extends MonthlyRoutine {
+  weekAndDay: WeekAndDay | null;
+}
+
+export interface GetMonthlyRoutineAPI extends StandardAPI {
+  monthlyRoutinesWithDate: MonthlyRoutineWithDate[];
+  monthlyRoutinesWithWeekAndDay: MonthlyRoutineWithWeekAndDay[];
 }
