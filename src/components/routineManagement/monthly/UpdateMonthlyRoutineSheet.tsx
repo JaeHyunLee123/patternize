@@ -59,8 +59,9 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
   classname,
 }) => {
   const { toast } = useToast();
-  const [routineType, setRoutineType] =
-    useState<monthlyRoutineType>("weekAndDay");
+  const [routineType, setRoutineType] = useState<monthlyRoutineType>(
+    routine.isDate ? "date" : "weekAndDay"
+  );
 
   const [date, setDate] = useState(
     "date" in routine ? String(routine.date?.date) : ""
@@ -117,6 +118,7 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
 
       mutate(form);
     } else {
+      console.log("hello");
       form.newDate = Number(date);
       form.isDate = true;
 
@@ -241,7 +243,7 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
           </div>
           <SheetClose asChild>
             <Button type="submit" className="w-[50%]" variant={"outline"}>
-              Create
+              Update
             </Button>
           </SheetClose>
         </form>
