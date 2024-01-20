@@ -42,7 +42,7 @@ interface UpdateMonthlyRoutineSheetProps {
 
 interface UpdateMonthlyRoutineForm {
   isDate: boolean;
-  content: string;
+  newContent: string;
 
   week?: number;
   day?: string;
@@ -220,7 +220,7 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
             <Label htmlFor="routine">Routine</Label>
             <Input
               id="routine"
-              {...register("content", {
+              {...register("newContent", {
                 required: "Please write routine.",
                 minLength: {
                   value: 2,
@@ -234,7 +234,7 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
               defaultValue={routine.content}
             />
             <span className="text-red-500">
-              {errors.content ? errors.content.message : ""}
+              {errors.newContent ? errors.newContent.message : ""}
             </span>
           </div>
           <SheetClose asChild>
