@@ -31,7 +31,7 @@ interface CreateMonthlyRoutineModalProps {
   ) => Promise<QueryObserverResult<unknown, Error>>;
 }
 
-interface CreateMontyleRoutineForm {
+interface CreateMonthlyRoutineForm {
   isDate: boolean;
   content: string;
 
@@ -59,10 +59,10 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({
     formState: { errors },
     reset,
     handleSubmit,
-  } = useForm<CreateMontyleRoutineForm>({ mode: "onChange" });
+  } = useForm<CreateMonthlyRoutineForm>({ mode: "onChange" });
 
   const { mutate } = useMutation({
-    mutationFn: (form: CreateMontyleRoutineForm) => {
+    mutationFn: (form: CreateMonthlyRoutineForm) => {
       return axios.post("api/routine/monthly", form);
     },
     onSuccess: () => {
@@ -84,7 +84,7 @@ const CreateMonthlyRoutineModal: FC<CreateMonthlyRoutineModalProps> = ({
     },
   });
 
-  const onSubmit = (form: CreateMontyleRoutineForm) => {
+  const onSubmit = (form: CreateMonthlyRoutineForm) => {
     if (routineType === "weekAndDay") {
       form.week = Number(week);
       form.day = day.toUpperCase();
