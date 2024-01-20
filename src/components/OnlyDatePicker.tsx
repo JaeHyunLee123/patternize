@@ -9,10 +9,15 @@ import { Calendar } from "lucide-react";
 interface OnlyDatePickerProps {
   classname?: string;
   onChange?: Dispatch<SetStateAction<string>>;
+  defaultValue?: string;
 }
 
-const OnlyDatePicker: FC<OnlyDatePickerProps> = ({ classname, onChange }) => {
-  const [date, setDate] = useState("");
+const OnlyDatePicker: FC<OnlyDatePickerProps> = ({
+  classname,
+  onChange,
+  defaultValue,
+}) => {
+  const [date, setDate] = useState(defaultValue ? defaultValue : "");
 
   useEffect(() => {
     if (onChange) onChange(date);

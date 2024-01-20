@@ -61,9 +61,19 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
   const [routineType, setRoutineType] =
     useState<monthlyRoutineType>("weekAndDay");
 
-  const [date, setDate] = useState("");
-  const [day, setDay] = useState("");
-  const [week, setWeek] = useState("");
+  const [date, setDate] = useState(
+    "date" in routine ? String(routine.date?.date) : ""
+  );
+  const [day, setDay] = useState(
+    "weekAndDay" in routine
+      ? routine.weekAndDay
+        ? routine.weekAndDay?.day.toLowerCase()
+        : ""
+      : ""
+  );
+  const [week, setWeek] = useState(
+    "weekAndDay" in routine ? String(routine.weekAndDay?.week) : ""
+  );
 
   const {
     register,
@@ -188,7 +198,11 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
               className="flex items-center justify-center"
             >
               <div className="flex flex-col items-center space-y-2">
-                <OnlyDatePicker classname="mt-2" onChange={setDate} />
+                <OnlyDatePicker
+                  classname="mt-2"
+                  onChange={setDate}
+                  defaultValue={date}
+                />
                 <span className="text-xs text-gray-500">
                   {date > "28"
                     ? "This routine will be shown at 28th on February"
