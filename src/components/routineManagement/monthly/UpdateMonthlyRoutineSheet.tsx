@@ -44,10 +44,10 @@ interface UpdateMonthlyRoutineForm {
   isDate: boolean;
   newContent: string;
 
-  week?: number;
-  day?: string;
+  newWeek?: number;
+  newDay?: string;
 
-  date?: number;
+  newDate?: number;
 }
 
 type monthlyRoutineType = "weekAndDay" | "date";
@@ -107,18 +107,18 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
 
   const onSubmit = (form: UpdateMonthlyRoutineForm) => {
     if (routineType === "weekAndDay") {
-      form.week = Number(week);
-      form.day = day.toUpperCase();
+      form.newWeek = Number(week);
+      form.newDay = day.toUpperCase();
       form.isDate = false;
 
-      if (!(1 <= form.week && form.week <= 4)) return;
+      if (!(1 <= form.newWeek && form.newWeek <= 4)) return;
 
       mutate(form);
     } else {
-      form.date = Number(date);
+      form.newDate = Number(date);
       form.isDate = true;
 
-      if (!(1 <= form.date || form.date <= 31)) return;
+      if (!(1 <= form.newDate || form.newDate <= 31)) return;
 
       mutate(form);
     }

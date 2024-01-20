@@ -260,7 +260,25 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const PUT = async (req: Request) => {};
+export const PUT = async (req: Request) => {
+  try {
+    const session = await getAuthSession();
+
+    if (!session?.user)
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
+
+    const body = await req.json();
+    const { isDate, newContent } = body;
+  } catch (error) {
+    return Response.json(
+      { errorMessage: "Unknown Error", ok: false },
+      { status: 500 }
+    );
+  }
+};
 
 export const DELETE = async (req: Request) => {
   try {
