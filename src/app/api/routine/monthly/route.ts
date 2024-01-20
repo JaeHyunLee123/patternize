@@ -271,7 +271,31 @@ export const PUT = async (req: Request) => {
       );
 
     const body = await req.json();
-    const { isDate, newContent } = body;
+    const { isDate, newContent, newWeek, newDay, newDate } = body;
+
+    if (!newContent || typeof newContent !== "string") {
+      return Response.json(
+        { errorMessage: "Need content", ok: false },
+        { status: 400 }
+      );
+    }
+
+    if (!(1 < newContent.length && newContent.length < 201))
+      return Response.json(
+        { errorMessage: "Invalid content", ok: false },
+        { status: 400 }
+      );
+
+    if (typeof isDate !== "boolean") {
+      return Response.json(
+        { errorMessage: "Is week&day or date?", ok: false },
+        { status: 400 }
+      );
+    }
+
+    if (isDate) {
+    } else {
+    }
   } catch (error) {
     return Response.json(
       { errorMessage: "Unknown Error", ok: false },
