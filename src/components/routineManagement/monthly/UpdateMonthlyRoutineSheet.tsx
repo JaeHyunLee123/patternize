@@ -118,7 +118,6 @@ const UpdateMonthlyRoutineSheet: FC<UpdateMonthlyRoutineSheetProps> = ({
 
       mutate(form);
     } else {
-      console.log("hello");
       form.newDate = Number(date);
       form.isDate = true;
 

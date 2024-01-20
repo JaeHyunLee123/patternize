@@ -271,7 +271,14 @@ export const PUT = async (req: Request) => {
       );
 
     const body = await req.json();
-    const { isDate, newContent, newWeek, newDay, newDate } = body;
+    const { isDate, newContent, newWeek, newDay, newDate, routineId } = body;
+
+    if (!routineId || typeof routineId !== "string") {
+      return Response.json(
+        { errorMessage: "Please retry after few seconds", ok: false },
+        { status: 400 }
+      );
+    }
 
     if (!newContent || typeof newContent !== "string") {
       return Response.json(
@@ -293,9 +300,202 @@ export const PUT = async (req: Request) => {
       );
     }
 
-    if (isDate) {
-    } else {
+    const routine = await db.monthlyRoutine.findUnique({
+      where: {
+        id: routineId,
+      },
+      include: {
+        routineControl: true,
+        date: true,
+        weekAndDay: true,
+      },
+    });
+
+    if (!routine || !routine.routineControl) {
+      return Response.json(
+        { errorMessage: "Cannot find routine", ok: false },
+        { status: 500 }
+      );
     }
+
+    if (session.user.id !== routine.routineControl.userId) {
+      return Response.json(
+        { errorMessage: "Unauthorized", ok: false },
+        { status: 401 }
+      );
+    }
+
+    //seperate to 4 cases
+    //ps) I just want to reduce nest despite of repeating
+    //week and day -> week and day
+    if (!routine.isDate && !isDate) {
+      if (!newWeek || typeof newWeek !== "number") {
+        return Response.json(
+          { errorMessage: "Need new week", ok: false },
+          { status: 400 }
+        );
+      }
+
+      if (!newDay || typeof newDay !== "string") {
+        return Response.json(
+          { errorMessage: "Need new day", ok: false },
+          { status: 400 }
+        );
+      }
+      if (
+        !(
+          newDay === "SUN" ||
+          newDay === "MON" ||
+          newDay === "TUE" ||
+          newDay === "WED" ||
+          newDay === "THU" ||
+          newDay === "FRI" ||
+          newDay === "SAT"
+        )
+      ) {
+        return Response.json(
+          { errorMessage: "Unvalid day", ok: false },
+          { status: 400 }
+        );
+      }
+
+      await db.weekAndDay.update({
+        where: {
+          id: routine.weekAndDayId || "",
+        },
+        data: {
+          day: newDay,
+          week: newWeek,
+        },
+      });
+
+      await db.monthlyRoutine.update({
+        where: {
+          id: routine.id,
+        },
+        data: {
+          content: newContent,
+        },
+      });
+    }
+    //week and day -> date
+    else if (!routine.isDate && isDate) {
+      if (!newDate || typeof newDate !== "number") {
+        return Response.json(
+          { errorMessage: "Need new date", ok: false },
+          { status: 400 }
+        );
+      }
+
+      const date = await db.date.create({
+        data: {
+          date: newDate,
+        },
+      });
+
+      await db.weekAndDay.delete({
+        where: {
+          id: routine.weekAndDayId || "",
+        },
+      });
+
+      await db.monthlyRoutine.update({
+        data: {
+          dateId: date.id,
+
+          content: newContent,
+          isDate: true,
+        },
+        where: {
+          id: routine.id,
+        },
+      });
+    }
+    //date -> date
+    else if (routine.isDate && isDate) {
+      if (!newDate || typeof newDate !== "number") {
+        return Response.json(
+          { errorMessage: "Need new date", ok: false },
+          { status: 400 }
+        );
+      }
+
+      await db.date.update({
+        where: {
+          id: routine.dateId || "",
+        },
+        data: {
+          date: newDate,
+        },
+      });
+
+      await db.monthlyRoutine.update({
+        where: {
+          id: routine.id,
+        },
+        data: {
+          content: newContent,
+        },
+      });
+    }
+    //date -> week and day
+    else {
+      if (!newWeek || typeof newWeek !== "number") {
+        return Response.json(
+          { errorMessage: "Need new week", ok: false },
+          { status: 400 }
+        );
+      }
+
+      if (!newDay || typeof newDay !== "string") {
+        return Response.json(
+          { errorMessage: "Need new day", ok: false },
+          { status: 400 }
+        );
+      }
+      if (
+        !(
+          newDay === "SUN" ||
+          newDay === "MON" ||
+          newDay === "TUE" ||
+          newDay === "WED" ||
+          newDay === "THU" ||
+          newDay === "FRI" ||
+          newDay === "SAT"
+        )
+      ) {
+        return Response.json(
+          { errorMessage: "Unvalid day", ok: false },
+          { status: 400 }
+        );
+      }
+
+      const weekAndDay = await db.weekAndDay.create({
+        data: {
+          day: newDay,
+          week: newWeek,
+        },
+      });
+
+      await db.date.delete({
+        where: {
+          id: routine.dateId || "",
+        },
+      });
+
+      await db.monthlyRoutine.update({
+        where: {
+          id: routine.id,
+        },
+        data: {
+          weekAndDayId: weekAndDay.id,
+          content: newContent,
+          isDate: false,
+        },
+      });
+    }
+
+    return Response.json({ ok: true }, { status: 201 });
   } catch (error) {
     return Response.json(
       { errorMessage: "Unknown Error", ok: false },
