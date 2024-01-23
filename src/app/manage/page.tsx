@@ -1,14 +1,12 @@
 import { getAuthSession } from "@/lib/auth";
 import ManageRoutines from "@/components/Routines";
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
 
-export default async function Home() {
+export default async function Manage() {
   const session = await getAuthSession();
 
   return (
     <main className="p-24">
-      {session ? <div>show todo here</div> : <h1>Login first!</h1>}
+      {session ? <ManageRoutines /> : <h1>Login first!</h1>}
     </main>
   );
 }

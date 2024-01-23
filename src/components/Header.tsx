@@ -11,15 +11,21 @@ const Header = async () => {
         <h1 className="font-bold text-xl">Patternize</h1>
       </Link>
 
-      {session ? (
-        <Button variant={"destructive"}>
-          <Link href="/sign-out">Sign Out</Link>
-        </Button>
-      ) : (
-        <Button>
-          <Link href="/sign-in">Sign In</Link>
-        </Button>
-      )}
+      <div className="flex items-center space-x-2">
+        <Link href="/manage">
+          <Button>Manage routine</Button>
+        </Link>
+
+        {session ? (
+          <Button variant={"destructive"}>
+            <Link href="/sign-out">Sign Out</Link>
+          </Button>
+        ) : (
+          <Button>
+            <Link href="/sign-in">Sign In</Link>
+          </Button>
+        )}
+      </div>
     </header>
   );
 };
