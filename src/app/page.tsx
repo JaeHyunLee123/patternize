@@ -106,18 +106,38 @@ export default async function Home() {
     }
   });
 
+  console.log(getWeek());
   return (
     <main className="p-24">
       {session ? (
         <div className="flex flex-col justify-center items-center w-full">
-          <Clock className="text-8xl" />
+          <Clock className="text-8xl text-primary" />
           <div>
-            <span>Daily rotuines</span>
-            <ul>
-              {/* {routineControl?.dailyRoutines.map((routine) => (
-                <li key={routine.id}>{routine.content}</li>
-              ))} */}
-            </ul>
+            <span className="text-4xl font-semibold">TODO</span>
+            <div>
+              <span className="text-2xl font-medium">Daily TODO</span>
+              <ul>
+                {dailyRoutines.map((routine) => (
+                  <li key={routine.id}>{routine.content}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <span className="text-2xl font-medium">Weekly TODO</span>
+              <ul>
+                {todayWeeklyRoutines.map((routine) => (
+                  <li key={routine.id}>{routine.content}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <span className="text-2xl font-medium">Monthly TODO</span>
+              <ul>
+                {todayMonthlyRoutines.map((routine) => (
+                  <li key={routine.id}>{routine.content}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       ) : (
