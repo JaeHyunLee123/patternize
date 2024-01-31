@@ -48,17 +48,9 @@ export const getDaysStringArr = (days: Days) => {
   return result;
 };
 
-export const getWeek = (): number => {
-  // Copy date so don't modify the original
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  // Set to nearest Sunday: current date - current day number
-  date.setDate(date.getDate() - date.getDay());
-  // Get the first day of the year
-  const yearStart = new Date(date.getFullYear(), 0, 1);
-  // Calculate full weeks to the nearest Sunday
-  const weekNumber = Math.ceil(
-    ((Number(date) - Number(yearStart)) / 86400000 + 1) / 7
-  );
-  return weekNumber;
+export const getWeek = (date: Date): number => {
+  const currentDate = date.getDate();
+  const firstDay = new Date(date.setDate(1)).getDay();
+
+  return Math.ceil((currentDate + firstDay) / 7);
 };

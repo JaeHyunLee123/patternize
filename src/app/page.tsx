@@ -92,7 +92,7 @@ export default async function Home() {
 
       return routine.date?.date === date.getDate();
     } else {
-      if (routine.weekAndDay?.week === getWeek()) {
+      if (routine.weekAndDay?.week === getWeek(new Date())) {
         switch (date.getDay()) {
           case 0:
             return routine.weekAndDay.day === "SUN";
