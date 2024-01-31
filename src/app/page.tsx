@@ -68,6 +68,14 @@ export default async function Home() {
 
   const todayMonthlyRoutines = monthlyRoutines.filter((routine) => {
     if (routine.isDate) {
+      if (
+        date.getDate() > 29 &&
+        date.getMonth() === 2 &&
+        date.getFullYear() % 4 === 0
+      ) {
+        return (routine.date?.date || 0) > 29;
+      }
+
       if (date.getDate() > 28 && date.getMonth() === 2) {
         return (routine.date?.date || 0) > 28;
       }
@@ -110,9 +118,9 @@ export default async function Home() {
   return (
     <main className="p-24">
       {session ? (
-        <div className="flex flex-col justify-center items-center w-full">
+        <div className="flex flex-col justify-center items-center w-full space-y-2">
           <Clock className="text-8xl text-primary" />
-          <div>
+          <div className="">
             <span className="text-4xl font-semibold">TODO</span>
             <div>
               <span className="text-2xl font-medium">Daily TODO</span>
