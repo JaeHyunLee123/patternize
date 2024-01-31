@@ -3,6 +3,7 @@ import Clock from "@/components/ui/Clock";
 import { db } from "@/lib/db";
 import { getWeek } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import OneDayTodo from "@/components/OneDayTodo";
 
 export default async function Home() {
   const session = await getAuthSession();
@@ -115,20 +116,58 @@ export default async function Home() {
       {session ? (
         <div className="flex flex-col justify-center items-center w-full space-y-2">
           <Clock className="text-8xl text-primary" />
-          <div className="">
+          <div className="text-primary">
             <span className="text-4xl font-semibold">TODO</span>
-            <div className="flex flex-col space-y-2">
-              <div>
+            <div className="flex space-x-2">
+              <div className="flex flex-col space-y-2">
+                <div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Daily TODO</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {dailyRoutines.length === 0 ? (
+                        <span>No daily TODO</span>
+                      ) : (
+                        <ul>
+                          {dailyRoutines.map((routine) => (
+                            <li key={routine.id}>{routine.content}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
                 <Card>
                   <CardHeader>
-                    <CardTitle>Daily TODO</CardTitle>
+                    <CardTitle className="text-2xl font-medium">
+                      Weekly TODO
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {dailyRoutines.length === 0 ? (
-                      <span>No daily TODO</span>
+                    {todayWeeklyRoutines.length === 0 ? (
+                      <span>No weekly TODO today</span>
                     ) : (
                       <ul>
-                        {dailyRoutines.map((routine) => (
+                        {todayWeeklyRoutines.map((routine) => (
+                          <li key={routine.id}>{routine.content}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-medium">
+                      Monthly TODO
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {todayMonthlyRoutines.length === 0 ? (
+                      <span>No monthly TODO today</span>
+                    ) : (
+                      <ul>
+                        {todayMonthlyRoutines.map((routine) => (
                           <li key={routine.id}>{routine.content}</li>
                         ))}
                       </ul>
@@ -136,42 +175,7 @@ export default async function Home() {
                   </CardContent>
                 </Card>
               </div>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl font-medium">
-                    Weekly TODO
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {todayWeeklyRoutines.length === 0 ? (
-                    <span>No weekly TODO today</span>
-                  ) : (
-                    <ul>
-                      {todayWeeklyRoutines.map((routine) => (
-                        <li key={routine.id}>{routine.content}</li>
-                      ))}
-                    </ul>
-                  )}
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl font-medium">
-                    Monthly TODO
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {todayMonthlyRoutines.length === 0 ? (
-                    <span>No monthly TODO today</span>
-                  ) : (
-                    <ul>
-                      {todayMonthlyRoutines.map((routine) => (
-                        <li key={routine.id}>{routine.content}</li>
-                      ))}
-                    </ul>
-                  )}
-                </CardContent>
-              </Card>
+              <OneDayTodo />
             </div>
           </div>
         </div>
