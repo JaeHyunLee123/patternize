@@ -90,39 +90,9 @@ model RoutineControl {
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 
-  oneDayRoutines  Routine[]
   dailyRoutines   DailyRoutine[]
   weeklyRoutines  WeeklyRoutine[]
   monthlyRoutines MonthlyRoutine[]
-}
-
-model Routine {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  content     String      @db.VarChar(200)
-  isDone      Boolean     @default(false)
-  date        DateTime
-  routineType RoutineType //ONE_DAY, DAILY, WEEKLY, MONTHLY
-
-  //routineControl field has value only when routineType is ONE_DAY or delayed weekly/monthly routine
-  routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
-  routineControlId String?
-  //dailyRoutine field has value only when routineType is DAILY
-  dailyRoutine     DailyRoutine?   @relation(fields: [dailyRoutineId], references: [id])
-  dailyRoutineId   String?
-  //weeklyRoutine field has value only when routineType is WEEKLY
-  weeklyRoutine    WeeklyRoutine?  @relation(fields: [weeklyRoutineId], references: [id])
-  weeklyRoutineId  String?
-  //monthlyRoutine field has value only when routineType is MONTHLY
-  monthlyRoutine   MonthlyRoutine? @relation(fields: [monthlyRoutineId], references: [id])
-  monthlyRoutineId String?
-
-  @@index([dailyRoutineId])
-  @@index([weeklyRoutineId])
-  @@index([monthlyRoutineId])
-  @@index([routineControlId])
 }
 
 model DailyRoutine {
@@ -131,8 +101,6 @@ model DailyRoutine {
   updatedAt DateTime @updatedAt
 
   content String @db.VarChar(200)
-
-  routines Routine[]
 
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
@@ -164,8 +132,6 @@ model WeeklyRoutine {
   days   Days   @relation(fields: [daysId], references: [id])
   daysId String
 
-  routines Routine[]
-
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
 
@@ -187,8 +153,6 @@ model MonthlyRoutine {
   dateId String?
 
   content String @db.VarChar(200)
-
-  routines Routine[]
 
   routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
   routineControlId String?
