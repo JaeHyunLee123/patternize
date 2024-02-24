@@ -1,18 +1,8 @@
 # My routine app
 
 This is routine web that can manage daily / weekly / monthly routines.
-This works on PC. Mobile version will be added after finish pc version.
+This works on PC.
 
-## TODO
-
-- login with next auth
-- control daily / weekly / monthly routine
-  - add
-  - remove
-  - modify
-  - check is done
-- dark mode
-- responsive design
 
 ## libraries
 
