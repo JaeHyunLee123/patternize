@@ -1,5 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
-import ManageRoutines from "@/components/Routines";
+import ManageRoutines from "@/components/ManageRoutines";
 
 export default async function Manage() {
   const session = await getAuthSession();
