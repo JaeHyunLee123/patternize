@@ -1,6 +1,7 @@
 import { getAuthSession } from "@/lib/auth";
 import { Button } from "./ui/Button";
 import Link from "next/link";
+import Nav from "./Nav";
 
 const Header = async () => {
   const session = await getAuthSession();
@@ -12,9 +13,7 @@ const Header = async () => {
       </Link>
 
       <div className="flex items-center space-x-2">
-        <Link href="/manage">
-          <Button>Manage routine</Button>
-        </Link>
+        {session ? <Nav /> : ""}
 
         {session ? (
           <Button variant={"destructive"}>
