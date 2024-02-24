@@ -3,12 +3,15 @@ import Clock from "@/components/ui/Clock";
 import { db } from "@/lib/db";
 import { getWeek } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import OneDayTodo from "@/components/OneDayTodo";
 
 export default async function Home() {
   const session = await getAuthSession();
 
   const date = new Date();
+
+  if (!session?.user) {
+    return <h1>Login first!</h1>;
+  }
 
   const routineControl = await db.routineControl.findUnique({
     where: {
@@ -175,7 +178,6 @@ export default async function Home() {
                   </CardContent>
                 </Card>
               </div>
-              <OneDayTodo />
             </div>
           </div>
         </div>
