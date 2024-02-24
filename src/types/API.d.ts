@@ -36,3 +36,14 @@ export interface GetMonthlyRoutineAPI extends StandardAPI {
   monthlyRoutinesWithDate: MonthlyRoutineWithDate[];
   monthlyRoutinesWithWeekAndDay: MonthlyRoutineWithWeekAndDay[];
 }
+
+interface MonthlyRoutineWithSchedule extends MonthlyRoutine {
+  weekAndDay: WeekAndDay | null;
+  date: Date | null;
+}
+
+export interface GetTodayRoutineAPI extends StandardAPI {
+  dailyRoutines: DailyRoutine[];
+  todayWeeklyRoutines: WeeklyRoutineWithDays[];
+  todayMonthlyRoutines: MonthlyRoutineWithSchedule[];
+}
