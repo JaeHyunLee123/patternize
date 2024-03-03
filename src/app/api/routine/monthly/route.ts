@@ -75,7 +75,7 @@ export const GET = async (req: Request) => {
 
     //sort by day
     const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    monthlyRoutinesWithWeekAndDay.sort((a: any, b: any) => {
+    monthlyRoutinesWithWeekAndDay.sort((a, b) => {
       const day1 = days.indexOf(a.weekAndDay?.day || "");
       const day2 = days.indexOf(b.weekAndDay?.day || "");
 
@@ -89,7 +89,7 @@ export const GET = async (req: Request) => {
       return 0;
     });
     //sort by week
-    monthlyRoutinesWithWeekAndDay.sort((a: any, b: any) => {
+    monthlyRoutinesWithWeekAndDay.sort((a, b) => {
       const week1 = a.weekAndDay?.week || 0;
       const week2 = b.weekAndDay?.week || 0;
 
