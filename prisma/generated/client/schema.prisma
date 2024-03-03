@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refreshToken") @db.Text
+  access_token      String? @map("accessToken") @db.Text
+  expires_at        Int?    @map("expiresAt")
+  token_type        String? @map("tokenType")
+  scope             String?
+  id_token          String? @map("idToken") @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  username  String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  routineControl RoutineControl?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum RoutineType {
+  ONE_DAY
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum Day {
+  SUN
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+}
+
+model RoutineControl {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  dailyRoutines   DailyRoutine[]
+  weeklyRoutines  WeeklyRoutine[]
+  monthlyRoutines MonthlyRoutine[]
+}
+
+model DailyRoutine {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content String @db.VarChar(200)
+
+  routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
+  routineControlId String?
+
+  @@index([routineControlId])
+}
+
+model Days {
+  id String @id @default(cuid())
+
+  sun Boolean @default(false)
+  mon Boolean @default(false)
+  tue Boolean @default(false)
+  wed Boolean @default(false)
+  thu Boolean @default(false)
+  fri Boolean @default(false)
+  sat Boolean @default(false)
+
+  WeeklyRoutine WeeklyRoutine[]
+}
+
+model WeeklyRoutine {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content String @db.VarChar(200)
+
+  days   Days   @relation(fields: [daysId], references: [id])
+  daysId String
+
+  routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
+  routineControlId String?
+
+  @@index([routineControlId])
+  @@index([daysId])
+}
+
+model MonthlyRoutine {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //User will choose one way to manage monthly routine.
+  isDate       Boolean
+  weekAndDay   WeekAndDay? @relation(fields: [weekAndDayId], references: [id])
+  weekAndDayId String?
+
+  date   Date?   @relation(fields: [dateId], references: [id])
+  dateId String?
+
+  content String @db.VarChar(200)
+
+  routineControl   RoutineControl? @relation(fields: [routineControlId], references: [id])
+  routineControlId String?
+
+  @@index([routineControlId])
+  @@index([weekAndDayId])
+  @@index([dateId])
+}
+
+model WeekAndDay {
+  id String @id @default(cuid())
+
+  day  Day
+  week Int
+
+  MonthlyRoutine MonthlyRoutine[]
+}
+
+model Date {
+  id String @id @default(cuid())
+
+  date Int
+
+  MonthlyRoutine MonthlyRoutine[]
+}
